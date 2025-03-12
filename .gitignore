@@ -1,0 +1,109 @@
+# Ignore CLion and JetBrains IDE files
+.idea/
+cmake-build-*/
+
+# Ignore CMake-generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CTestTestfile.cmake
+cmake_install.cmake
+CMakeLists.txt.user
+Makefile
+compile_commands.json
+
+# Ignore build directories
+build/
+bin/
+obj/
+lib/
+out/
+dist/
+
+# Ignore temporary files
+*.swp
+*.swo
+*.tmp
+*.log
+*.tlog
+*.bak
+*.cache
+*.ccls-cache/
+*.vscode/
+
+# Ignore compiled binary files
+*.exe
+*.out
+*.app
+*.hex
+*.elf
+
+# Ignore compiled object files
+*.o
+*.obj
+*.a
+*.so
+*.lib
+*.dll
+*.dylib
+*.exp
+*.pdb
+*.ilk
+
+# Ignore debugging and profiling files
+*.ncb
+*.sdf
+*.pdb
+*.opendb
+*.VC.db
+
+# Ignore test results
+Testing/
+test-results/
+*.gcda
+*.gcno
+*.gcov
+
+# Ignore CLion Run/Debug Configurations
+run/
+debug/
+
+# Ignore package managers and dependencies
+node_modules/
+vendor/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore macOS and Linux system files
+.AppleDouble
+.LSOverride
+._*
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Ignore Windows system files
+$RECYCLE.BIN/
+*.lnk
+
+# Ignore Python virtual environment (if used)
+venv/
+__pycache__/
+*.pyc
+
+# Ignore JetBrains Rider (if using Rider for C++)
+*.sln.iml
+.idea/
+
+# Ignore Valgrind and sanitizer output
+valgrind-out.txt
+asan.log
+tsan.log
+msan.log
