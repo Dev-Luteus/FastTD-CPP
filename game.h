@@ -4,8 +4,8 @@
 class Game
 {
     private:
-    static constexpr int screenWidth { 1920 };
-    static constexpr int screenHeight { 1080 };
+    static constexpr int SCREEN_WIDTH { 1920 };
+    static constexpr int SCREEN_HEIGHT { 1080 };
 
     void draw();
 

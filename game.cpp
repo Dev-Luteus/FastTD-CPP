@@ -3,7 +3,7 @@
 
 void Game::initialize()
 {
-    InitWindow(screenWidth, screenHeight, "FastTD");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FastTD");
     SetTargetFPS(60);
 }
 
