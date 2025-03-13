@@ -1,18 +1,12 @@
-﻿#include <iostream>
-#include <raylib.h>
+﻿#include "game.h"
 
 int main()
 {
-    constexpr int screenWidth = { 1920 };
-    constexpr int screenHeight = { 1080 };
+    Game game;
 
-    SetTargetFPS(200);
-    InitWindow(screenHeight, screenWidth, "FastTD");
-
-    while (!WindowShouldClose())
-    {
-
-    }
+    game.initialize();
+    game.run();
+    game.shutdown();
 
     return 0;
 }
