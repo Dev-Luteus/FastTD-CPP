@@ -1,28 +1,36 @@
 ﻿#include "raylib.h"
 #include "game.h"
 
-void Game::initialize()
+#include "grid.h"
+
+void Game::Initialize()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FastTD");
     SetTargetFPS(60);
+
+    grid.LoadTextures();
+    grid.GenerateGrid();
 }
 
-void Game::run()
+void Game::Run()
 {
     while (!WindowShouldClose())
     {
-        Game::draw();
+        Game::Draw();
     }
 }
 
-void Game::draw()
+void Game::Draw()
 {
     BeginDrawing();
     ClearBackground(RAYWHITE);
+
+    grid.DrawGrid();
+
     EndDrawing();
 }
 
-void Game::shutdown()
+void Game::Shutdown()
 {
     CloseWindow();
 }

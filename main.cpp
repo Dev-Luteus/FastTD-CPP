@@ -4,9 +4,9 @@ int main()
 {
     Game game;
 
-    game.initialize();
-    game.run();
-    game.shutdown();
+    game.Initialize();
+    game.Run();
+    game.Shutdown();
 
     return 0;
 }
