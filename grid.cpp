@@ -4,7 +4,7 @@
 
 Grid::~Grid()
 {
-    for (int i = 0; i < MAX_TEXTURES; ++i)
+    for (int i = 0; i < MAX_GRID_TEXTURES; ++i)
     {
         /* Raylib assigns a non-zero value to a texture, if it's been successfully loaded ->
          * -> into gpu memory, meaning we can easily check this!
@@ -18,13 +18,14 @@ Grid::~Grid()
 
 void Grid::LoadTextures()
 {
-    // Cell.id, not texture.id
-    textures[0] = LoadTexture("../resources/stone_tiles/s1.png");
-    textures[1] = LoadTexture("../resources/stone_tiles/s2.png");
-    textures[2] = LoadTexture("../resources/stone_tiles/s3.png");
-    textures[3] = LoadTexture("../resources/stone_tiles/s4.png");
-}
+    // We have 9 textures, S1 to S9.
+    for (int i = 0; i < MAX_GRID_TEXTURES; ++i)
+    {
+        std::string fileName = "../resources/stone_tiles/s" + std::to_string(i + 1) + ".png"; // i+1 - S0 does not exist!
 
+        textures[i] = LoadTexture(fileName.c_str());
+    }
+}
 
 void Grid::GenerateGrid()
 {
@@ -32,7 +33,7 @@ void Grid::GenerateGrid()
     {
         for (int x = 0; x < GRID_WIDTH; ++x)
         {
-            cells[x][y].id = 0;
+            cells[x][y].id = GetRandomValue(0, 8);
         }
     }
 }
@@ -53,7 +54,7 @@ void Grid::DrawGrid() const
 
 void Grid::DrawCell(int id, int x, int y) const
 {
-    if (id >= 0 && id < MAX_TEXTURES && textures[id].id != 0)
+    if (id >= 0 && id < MAX_GRID_TEXTURES && textures[id].id != 0)
     {
         DrawTexture(textures[id], x, y, WHITE);
     }

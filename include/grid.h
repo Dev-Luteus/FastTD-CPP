@@ -9,18 +9,19 @@
 class Grid
 {
     private:
-    static constexpr int GRID_WIDTH { 47 };
-    static constexpr int GRID_HEIGHT { 31 };
-    static constexpr int MAX_TEXTURES { 10 };
-
-    // Grid width containing Cell rows by height
-    std::array<std::array<Cell, GRID_HEIGHT>, GRID_WIDTH> cells;
-    std::array<Texture2D, MAX_TEXTURES> textures;
+    static constexpr int MAX_GRID_TEXTURES { 10 };
 
     void CheckBounds(int x, int y) const;
     void DrawCell(int id, int x, int y) const;
 
     public:
+    static constexpr int GRID_WIDTH { 47 };
+    static constexpr int GRID_HEIGHT { 31 };
+
+    // Grid width containing Cell rows by height
+    std::array<std::array<Cell, GRID_HEIGHT>, GRID_WIDTH> cells;
+    std::array<Texture2D, MAX_GRID_TEXTURES> textures;
+
     Grid() = default;
     ~Grid(); // A de-constructor to unload our textures ^^!
 

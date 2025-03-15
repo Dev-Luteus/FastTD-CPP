@@ -9,10 +9,12 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_executable(FastTD main.cpp
         game.cpp
-        game.h
-        cell.h
+        include/game.h
+        include/cell.h
         grid.cpp
-        grid.h)
+        include/grid.h
+        obstacles.cpp
+        include/obstacles.h)
 
 # Link Raylib library (and required Windows libraries)
 target_link_libraries(FastTD raylib winmm)
