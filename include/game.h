@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 #include "grid.h"
+#include "spire.h"
 
 class Game
 {
@@ -9,6 +10,7 @@ class Game
     static constexpr int SCREEN_HEIGHT { 1080 };
 
     Grid grid;
+    Spire spire;
 
     void Draw();
 

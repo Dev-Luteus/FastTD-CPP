@@ -20,7 +20,9 @@ void Grid::LoadTextures()
 {
     for (int i = 0; i < MAX_GRID_TEXTURES; ++i)
     {
-        std::string fileName = "../resources/stone_tiles/s" + std::to_string(i + 1) + ".png"; // i+1 - S0 does not exist!
+        // i+1 - S0 does not exist!
+        std::string fileName = "../resources/background_tiles/s"
+        + std::to_string(i + 1) + ".png";
 
         textures[i] = LoadTexture(fileName.c_str());
     }
@@ -32,7 +34,8 @@ void Grid::GenerateGrid()
     {
         for (int x = 0; x < GRID_WIDTH; ++x)
         {
-            cells[x][y].id = GetRandomValue(0, MAX_GRID_TEXTURES-1);
+            cells[x][y].spriteId = GetRandomValue(0, MAX_GRID_TEXTURES-1);
+            cells[x][y].valueId = 1;
         }
     }
 }
@@ -46,7 +49,7 @@ void Grid::DrawGrid() const
             int screenX = x * Cell::CELL_SIZE;
             int screenY = y * Cell::CELL_SIZE;
 
-            DrawCell(cells[x][y].id, screenX, screenY);
+            DrawCell(cells[x][y].spriteId, screenX, screenY);
         }
     }
 }

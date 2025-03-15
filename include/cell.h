@@ -3,7 +3,8 @@
 
 struct Cell
 {
-    int id { 0 };
+    int spriteId { 0 };
+    int valueId { 0 };
     static constexpr int CELL_SIZE { 64 };
 };
 

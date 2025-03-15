@@ -10,6 +10,9 @@ void Game::Initialize()
 
     grid.LoadTextures();
     grid.GenerateGrid();
+
+    spire.LoadTextures();
+    spire.PlaceInCenter(grid);
 }
 
 void Game::Run()
@@ -26,6 +29,7 @@ void Game::Draw()
     ClearBackground(RAYWHITE);
 
     grid.DrawGrid();
+    spire.Draw();
 
     EndDrawing();
 }
