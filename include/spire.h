@@ -6,7 +6,7 @@
 
 class Spire
 {
-    private:
+private:
     static constexpr int SPIRE_SIZE { 5 }; // 5x5
     static constexpr int SPIRE_SPRITE_ID { 100 };
 
@@ -14,7 +14,7 @@ class Spire
     int gridX;
     int gridY;
 
-    public:
+public:
     Spire() = default;
     ~Spire();
 

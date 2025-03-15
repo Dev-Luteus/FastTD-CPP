@@ -6,7 +6,7 @@
 
 class Game
 {
-    private:
+private:
     static constexpr int SCREEN_WIDTH { 1920 };
     static constexpr int SCREEN_HEIGHT { 1080 };
 
@@ -16,7 +16,7 @@ class Game
 
     void Draw();
 
-    public:
+public:
     Game() = default; // Default Constructor no args ( if no args = use default )
 
     void Initialize();

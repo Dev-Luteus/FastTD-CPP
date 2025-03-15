@@ -14,7 +14,7 @@ struct ObstaclePos
 
 class Obstacles
 {
-    private:
+private:
     static constexpr int OBSTACLES_MAX_TEXTURES { 4 };
     static constexpr int OBSTACLES_MAX_AMOUNT { 12 };
     static constexpr int OBSTACLE_SIZE { 2 }; // 2x2
@@ -26,7 +26,7 @@ class Obstacles
     bool IsPositionValid(int x, int y, const Grid& grid) const;
     bool BoundsPadding(int& x, int& y, const Grid& grid) const;
 
-    public:
+public:
     Obstacles() = default;
     ~Obstacles();
 

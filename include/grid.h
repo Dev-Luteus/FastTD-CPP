@@ -3,18 +3,17 @@
 
 #include <array>
 #include <raylib.h>
-
 #include "cell.h"
 
 class Grid
 {
-    private:
+private:
     static constexpr int MAX_GRID_TEXTURES { 11 };
 
     void CheckBounds(int x, int y) const;
     void DrawCell(int id, int x, int y) const;
 
-    public:
+public:
     static constexpr int GRID_WIDTH { 25 };
     static constexpr int GRID_HEIGHT { 17 };
 
