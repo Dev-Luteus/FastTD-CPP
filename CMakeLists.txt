@@ -14,7 +14,9 @@ add_executable(FastTD main.cpp
         grid.cpp
         include/grid.h
         obstacles.cpp
-        include/obstacles.h)
+        include/obstacles.h
+        spire.cpp
+        include/spire.h)
 
 # Link Raylib library (and required Windows libraries)
 target_link_libraries(FastTD raylib winmm)

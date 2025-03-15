@@ -18,7 +18,6 @@ Grid::~Grid()
 
 void Grid::LoadTextures()
 {
-    // We have 9 textures, S1 to S9.
     for (int i = 0; i < MAX_GRID_TEXTURES; ++i)
     {
         std::string fileName = "../resources/stone_tiles/s" + std::to_string(i + 1) + ".png"; // i+1 - S0 does not exist!
@@ -33,7 +32,7 @@ void Grid::GenerateGrid()
     {
         for (int x = 0; x < GRID_WIDTH; ++x)
         {
-            cells[x][y].id = GetRandomValue(0, 8);
+            cells[x][y].id = GetRandomValue(0, MAX_GRID_TEXTURES-1);
         }
     }
 }
@@ -56,7 +55,11 @@ void Grid::DrawCell(int id, int x, int y) const
 {
     if (id >= 0 && id < MAX_GRID_TEXTURES && textures[id].id != 0)
     {
-        DrawTexture(textures[id], x, y, WHITE);
+        // In order to upscale the textures to 64 pixels, we need a vector for DrawTextureEx
+        Vector2 position = { static_cast<float>(x), static_cast<float>(y) };
+
+        // art 32x, render at 2x size
+        DrawTextureEx(textures[id], position, 0, 2.0f, WHITE);
     }
 }
 

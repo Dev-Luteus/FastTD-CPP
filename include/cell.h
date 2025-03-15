@@ -4,7 +4,7 @@
 struct Cell
 {
     int id { 0 };
-    static constexpr int CELL_SIZE { 32 };
+    static constexpr int CELL_SIZE { 64 };
 };
 
 #endif //CELL_H
