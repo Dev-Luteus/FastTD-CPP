@@ -7,7 +7,9 @@
 class Spire
 {
     private:
-    static constexpr int SPIRE_SIZE = 5; // 5x5
+    static constexpr int SPIRE_SIZE { 5 }; // 5x5
+    static constexpr int SPIRE_SPRITE_ID { 100 };
+
     Texture2D texture;
     int gridX;
     int gridY;

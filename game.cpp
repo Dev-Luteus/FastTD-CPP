@@ -13,6 +13,9 @@ void Game::Initialize()
 
     spire.LoadTextures();
     spire.PlaceInCenter(grid);
+
+    obstacles.LoadTextures();
+    obstacles.GenerateObstacles(grid);
 }
 
 void Game::Run()
@@ -30,6 +33,7 @@ void Game::Draw()
 
     grid.DrawGrid();
     spire.Draw();
+    obstacles.DrawObstacles();
 
     EndDrawing();
 }

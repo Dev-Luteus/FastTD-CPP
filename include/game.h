@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 #include "grid.h"
+#include "obstacles.h"
 #include "spire.h"
 
 class Game
@@ -11,6 +12,7 @@ class Game
 
     Grid grid;
     Spire spire;
+    Obstacles obstacles;
 
     void Draw();
 

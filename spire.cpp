@@ -22,7 +22,7 @@ void Spire::PlaceInCenter(Grid& grid)
     {
         for (int x = 0; x < SPIRE_SIZE; ++x)
         {
-            grid.ModifyCell(gridX + x, gridY + y).spriteId = 100;
+            grid.ModifyCell(gridX + x, gridY + y).spriteId = SPIRE_SPRITE_ID;
             grid.ModifyCell(gridX + x, gridY + y).valueId = 0;
         }
     }
