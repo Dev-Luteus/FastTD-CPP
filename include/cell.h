@@ -5,7 +5,7 @@ struct Cell
 {
     int spriteId { 0 };
     int valueId { 0 };
-    static constexpr int CELL_SIZE { 64 };
+    static constexpr double CELL_SIZE { 64 };
 };
 
 #endif //CELL_H

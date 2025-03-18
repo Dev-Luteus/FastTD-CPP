@@ -62,6 +62,7 @@ void Grid::DrawCell(int id, int x, int y) const
         Vector2 position = { static_cast<float>(x), static_cast<float>(y) };
 
         // art 32x, render at 2x size
+        SetTextureFilter(textures[id], TEXTURE_FILTER_POINT);
         DrawTextureEx(textures[id], position, 0, 2.0f, WHITE);
     }
 }

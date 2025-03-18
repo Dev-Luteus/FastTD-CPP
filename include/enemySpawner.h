@@ -16,10 +16,11 @@ class Enemy;
 class EnemySpawner
 {
 private:
-    static constexpr int ENEMY_SPAWNER_SIZE { 4 };
+    static constexpr int ENEMY_SPAWNER_SIZE { 3 };
     static constexpr int ENEMY_SPAWNER_VALUE_ID { 10 };
-    static constexpr float ENEMY_SPAWNER_INTERVAL { 3.0f }; // Every X seconds
-    static constexpr float SPAWN_POINT_X { 2 };
+    static constexpr float ENEMY_SPAWNER_INTERVAL { 5.0f }; // Every X seconds
+
+    static constexpr float SPAWN_POINT_X { 1 };
     static constexpr float SPAWN_POINT_Y { 3 };
 
     Texture2D texture { 0 };

@@ -28,8 +28,8 @@ void Obstacles::LoadTextures()
 bool Obstacles::IsPositionValid(int x, int y, const Grid& grid) const
 {
     if (x < 0 || y < 0 ||
-        x + OBSTACLES_PADDING > Grid::GetWidth() ||
-        y + OBSTACLES_PADDING > Grid::GetHeight())
+        x + OBSTACLES_PADDING + OBSTACLES_PADDING > Grid::GetWidth() ||
+        y + OBSTACLES_PADDING + OBSTACLES_PADDING > Grid::GetHeight())
     {
         return false;
     }
@@ -168,6 +168,8 @@ void Obstacles::DrawObstacles() const
         float screenY = obstacle.y * Cell::CELL_SIZE;
 
         Vector2 position = { screenX, screenY };
+
+        SetTextureFilter(obstacleTextures[obstacle.textureId], TEXTURE_FILTER_POINT);
         DrawTextureEx(obstacleTextures[obstacle.textureId], position, 0, 2.0f, WHITE);
     }
 }

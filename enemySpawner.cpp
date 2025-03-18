@@ -70,6 +70,7 @@ void EnemySpawner::DrawSpawner() const
         auto screenY = static_cast<float>(gridY * Cell::CELL_SIZE);
 
         Vector2 position = { screenX, screenY };
+
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
     }
 }

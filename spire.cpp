@@ -36,6 +36,8 @@ void Spire::Draw() const
         float screenY = gridY * Cell::CELL_SIZE;
 
         Vector2 position = { screenX, screenY };
+
+        SetTextureFilter(texture, TEXTURE_FILTER_POINT);
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
     }
 }

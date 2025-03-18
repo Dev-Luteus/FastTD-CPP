@@ -58,6 +58,7 @@ void Enemy::Draw() const
         Vector2 position = { screenX, screenY };
 
         // 32x, 38y ( bad but works)
+        SetTextureFilter(texture, TEXTURE_FILTER_POINT);
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
     }
 }
