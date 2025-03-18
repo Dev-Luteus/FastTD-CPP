@@ -1,8 +1,9 @@
 ﻿#include "pathFinder.h"
-
 #include <algorithm>
 #include <cstdio>
 #include <list>
+
+PathFinder::PathFinder(Grid &grid) : grid(grid) { }
 
 std::vector<PathNode> PathFinder::FindPath(int startX, int startY, int endX, int endY)
 {
@@ -62,10 +63,7 @@ std::vector<PathNode> PathFinder::FindPath(int startX, int startY, int endX, int
         }
     }
 
-    // TODO: startNode is incorrect, should be SPAWN POINT ( enemy Spawner )
     PathNode* startNode = &nodes[startY * Grid::GetWidth() + startX];
-
-    // TODO: endNode is incorrect, should be SPIRE Cell
     PathNode* endNode = &nodes[endY * Grid::GetWidth() + endX];
 
     // Initialize

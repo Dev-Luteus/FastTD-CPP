@@ -2,12 +2,23 @@
 #include <stdexcept>
 #include "enemy.h"
 
+EnemySpawner::EnemySpawner()
+    : texture{0}, gridX{0}, gridY{0}, spawnTimer{0.0f},
+      pathFinder{nullptr}, targetX{0}, targetY{0}, hasTarget{false}
+{
+    spawnPoint.x = 0;
+    spawnPoint.y = 0;
+}
+
 EnemySpawner::~EnemySpawner()
 {
     if (texture.id != 0)
     {
         UnloadTexture(texture);
     }
+
+    delete pathFinder;
+    pathFinder = nullptr;
 
     for (Enemy* enemy : enemies)
     {
@@ -39,19 +50,24 @@ void EnemySpawner::PlaceSpawner(Grid& grid)
         }
     }
 
-    spawnPoint.x = gridX + 1;
-    spawnPoint.y = gridY + 2;
+    spawnPoint.x = SPAWN_POINT_X;
+    spawnPoint.y = SPAWN_POINT_Y;
 
     grid.ModifyCell(spawnPoint.x, spawnPoint.y).valueId = ENEMY_SPAWNER_VALUE_ID;
-}
 
+    // Initialize our pathfinder!
+    if (pathFinder == nullptr)
+    {
+        pathFinder = new PathFinder(grid);
+    }
+}
 
 void EnemySpawner::DrawSpawner() const
 {
     if (texture.id != 0)
     {
-        float screenX = gridX * Cell::CELL_SIZE;
-        float screenY = gridY * Cell::CELL_SIZE;
+        auto screenX = static_cast<float>(gridX * Cell::CELL_SIZE);
+        auto screenY = static_cast<float>(gridY * Cell::CELL_SIZE);
 
         Vector2 position = { screenX, screenY };
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
@@ -86,16 +102,50 @@ void EnemySpawner::Update(float deltaTime, Grid &grid)
         Enemy* enemy = *it;
         enemy->Update(deltaTime, grid);
 
-        //TODO: Check if enemy is out of bounds or dead
+        if (enemy->HasReachedGoal())
+        {
+            // TODO: Stop Movement, switch to Attack(); phase, Damage Spire
+        }
     }
 }
 
 void EnemySpawner::SpawnEnemies(Grid &grid)
 {
-    Enemy* enemy = new Enemy(spawnPoint.x, spawnPoint.y);
-    enemies.push_back(enemy); // Add enemy to the list
+    auto* enemy = new Enemy(spawnPoint.x, spawnPoint.y);
 
-    //TODO: A* agent target = enemy->SetNextTarget
+    if (hasTarget && pathFinder != nullptr)
+    {
+        // Calculate path
+        std::vector<PathNode> path = pathFinder->FindPath
+        (
+            spawnPoint.x,
+            spawnPoint.y,
+            targetX,
+            targetY
+        );
+
+        if (!path.empty())
+        {
+            // give path
+            enemy->SetPath(path);
+            enemies.push_back(enemy);
+        }
+        else
+        {
+            printf("No path found for enemy from (%d, %d) to (%d, %d)\n",
+                   spawnPoint.x, spawnPoint.y, targetX, targetY);
+        }
+    }
+}
+
+void EnemySpawner::SetTarget(int x, int y)
+{
+    targetX = x; targetY = y; hasTarget = true;
+}
+
+bool EnemySpawner::HasTarget() const
+{
+    return hasTarget;
 }
 
 void EnemySpawner::DrawEnemies() const

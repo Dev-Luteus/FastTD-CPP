@@ -39,3 +39,13 @@ void Spire::Draw() const
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
     }
 }
+
+int Spire::GetCenterX() const
+{
+    return gridX + SPIRE_SIZE / 2;
+}
+
+int Spire::GetCenterY() const
+{
+    return gridY + SPIRE_SIZE / 2;
+}

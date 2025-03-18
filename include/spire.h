@@ -21,6 +21,9 @@ public:
     void LoadTextures();
     void PlaceInCenter(Grid& grid);
     void Draw() const;
+
+    [[nodiscard]] int GetCenterX() const;
+    [[nodiscard]] int GetCenterY() const;
 };
 
 #endif //SPIRE_H

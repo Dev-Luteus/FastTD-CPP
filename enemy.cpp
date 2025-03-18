@@ -33,7 +33,18 @@ void Enemy::Update(float deltaTime, Grid &grid)
     {
         movementTimer = 0.0f;
 
-        // A* Agent Pathfinding
+        FollowPath();
+    }
+}
+
+void Enemy::FollowPath()
+{
+    if (!path.empty() && currentPathIndex < path.size())
+    {
+        gridX = path[currentPathIndex].x;
+        gridY = path[currentPathIndex].y;
+
+        currentPathIndex++;
     }
 }
 
@@ -41,16 +52,30 @@ void Enemy::Draw() const
 {
     if (texture.id != 0)
     {
-        float screenX = gridX * Cell::CELL_SIZE;
-        float screenY = gridY * Cell::CELL_SIZE;
+        auto screenX = static_cast<float>(gridX * Cell::CELL_SIZE);
+        auto screenY = static_cast<float>(gridY * Cell::CELL_SIZE);
 
         Vector2 position = { screenX, screenY };
+
+        // 32x, 38y ( bad but works)
         DrawTextureEx(texture, position, 0, 2.0f, WHITE);
     }
 }
 
-void Enemy::SetNextTarget(int x, int y)
+void Enemy::SetPath(const std::vector<PathNode> &newPath)
 {
-    targetGridX = x;
-    targetGridY = y;
+    path = newPath; // calculated path
+    currentPathIndex = 0;
+
+    if (!newPath.empty())
+    {
+        const PathNode& destination = newPath.back(); // .back() = final destination!
+        targetGridX = destination.x;
+        targetGridY = destination.y;
+    }
+}
+
+bool Enemy::HasReachedGoal() const
+{
+    return path.empty() || currentPathIndex >= path.size();
 }

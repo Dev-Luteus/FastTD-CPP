@@ -12,8 +12,6 @@ private:
 
     float CalculateDistance(const PathNode* a, const PathNode* b);
     float CalculateHeuristic(const PathNode* a, const PathNode* b);
-    bool IsValidPosition(int x, int y);
-    float GetMovementCost(PathNode* current, PathNode* neighbour);
 
 public:
     explicit PathFinder(Grid& grid);

@@ -14,6 +14,7 @@ void Game::Initialize()
 
     enemy_spawner.LoadTextures();
     enemy_spawner.PlaceSpawner(grid);
+    enemy_spawner.SetTarget(spire.GetCenterX(), spire.GetCenterY());
 
     obstacles.LoadTextures();
     obstacles.GenerateObstacles(grid);

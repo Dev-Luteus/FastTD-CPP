@@ -3,16 +3,20 @@
 
 #include <raylib.h>
 #include "grid.h"
+#include "pathNode.h"
 
 class Enemy
 {
 private:
     static constexpr float MOVE_SPEED { 1.0f }; // X cell per second
 
-    Texture2D texture;
+    Texture2D texture { 0 };
     int gridX;
     int gridY;
     float movementTimer { 0.0f };
+
+    std::vector<PathNode> path; // store final path
+    size_t currentPathIndex { 0 }; // size_t for conveinence
 
     int targetGridX;
     int targetGridY;
@@ -25,11 +29,10 @@ public:
     void Update(float deltaTime, Grid& grid);
     void Draw() const;
 
-    // Method to set the next target position
-    // You'll implement A* pathfinding to determine this target
-    void SetNextTarget(int x, int y);
+    void SetPath(const std::vector<PathNode>& newPath);
+    void FollowPath();
 
-    // Get current grid position
+    [[nodiscard]] bool HasReachedGoal() const;
     [[nodiscard]] int GetGridX() const { return gridX; }
     [[nodiscard]] int GetGridY() const { return gridY; }
 };

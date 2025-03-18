@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include "grid.h"
 #include <vector>
+#include "pathFinder.h"
 
 /* Note to self, forward declare when:
  - Don't need to access its members or methods,
@@ -18,10 +19,12 @@ private:
     static constexpr int ENEMY_SPAWNER_SIZE { 4 };
     static constexpr int ENEMY_SPAWNER_VALUE_ID { 10 };
     static constexpr float ENEMY_SPAWNER_INTERVAL { 3.0f }; // Every X seconds
+    static constexpr float SPAWN_POINT_X { 2 };
+    static constexpr float SPAWN_POINT_Y { 3 };
 
-    Texture2D texture;
-    int gridX;
-    int gridY;
+    Texture2D texture { 0 };
+    int gridX { 0 };
+    int gridY { 0 };
 
     /* vector = C++ dynamic array,
      * store pointers to Enemy objects, which allows us to create Enemies in the heap,
@@ -31,14 +34,21 @@ private:
     float spawnTimer { 0.0f };
     std::vector<Enemy*> enemies;
 
+    // enemies
+    PathFinder* pathFinder{nullptr}; // store as nullptr, initialize later
+
+    int targetX { 0 };
+    int targetY { 0 };
+    bool hasTarget { false };
+
 public:
     struct SpawnPoint
     {
-        int x;
-        int y;
+        int x { 0 };
+        int y { 0 };
     } spawnPoint;
 
-    EnemySpawner() = default;
+    EnemySpawner();
     ~EnemySpawner();
 
     void LoadTextures();
@@ -48,6 +58,9 @@ public:
     void Update(float deltaTime, Grid& grid);
     void SpawnEnemies(Grid& grid);
     void DrawEnemies() const;
+
+    void SetTarget(int x, int y);
+    [[nodiscard]] bool HasTarget() const;
 };
 
 #endif //ENEMYSPAWNER_H
