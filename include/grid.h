@@ -9,13 +9,13 @@ class Grid
 {
 private:
     static constexpr int MAX_GRID_TEXTURES { 11 };
+    static constexpr int GRID_WIDTH { 25 };
+    static constexpr int GRID_HEIGHT { 17 };
 
     void CheckBounds(int x, int y) const;
     void DrawCell(int id, int x, int y) const;
 
 public:
-    static constexpr int GRID_WIDTH { 25 };
-    static constexpr int GRID_HEIGHT { 17 };
 
     // Grid width containing Cell rows by height
     std::array<std::array<Cell, GRID_HEIGHT>, GRID_WIDTH> cells;

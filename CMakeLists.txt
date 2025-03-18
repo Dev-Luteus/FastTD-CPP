@@ -17,10 +17,13 @@ add_executable(FastTD main.cpp
         include/obstacles.h
         spire.cpp
         include/spire.h
-        enemySpawner.cpp
+        EnemySpawner.cpp
         include/EnemySpawner.h
         include/Enemy.h
         enemy.cpp
+        include/pathNode.h
+        include/PathFinder.h
+        pathFinder.cpp
 )
 
 # Link Raylib library (and required Windows libraries)

@@ -8,6 +8,7 @@
 
 class Game
 {
+// this private: is unnecessary, but I will include it in every file
 private:
     static constexpr int SCREEN_WIDTH { 1920 };
     static constexpr int SCREEN_HEIGHT { 1080 };
