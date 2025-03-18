@@ -1,8 +1,10 @@
 ﻿#ifndef GAME_H
 #define GAME_H
+
 #include "grid.h"
 #include "obstacles.h"
 #include "spire.h"
+#include "enemySpawner.h"
 
 class Game
 {
@@ -13,9 +15,10 @@ private:
     Grid grid;
     Spire spire;
     Obstacles obstacles;
+    EnemySpawner enemy_spawner;
 
     void Draw();
-
+    void Update(float deltaTime);
 public:
     Game() = default; // Default Constructor no args ( if no args = use default )
 

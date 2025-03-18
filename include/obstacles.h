@@ -12,11 +12,12 @@ struct ObstaclePos
     int textureId;
 };
 
+// This Obstacle code definitely sucks. But I only need a simple implementation for now
 class Obstacles
 {
 private:
     static constexpr int OBSTACLES_MAX_TEXTURES { 4 };
-    static constexpr int OBSTACLES_MAX_AMOUNT { 12 };
+    static constexpr int OBSTACLES_MAX_AMOUNT { 10 };
     static constexpr int OBSTACLE_SIZE { 2 }; // 2x2
     static constexpr int OBSTACLES_PADDING { 2 };
 
