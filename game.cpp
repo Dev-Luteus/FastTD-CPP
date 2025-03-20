@@ -12,12 +12,15 @@ void Game::Initialize()
     spire.LoadTextures();
     spire.PlaceInCenter(grid);
 
-    enemy_spawner.LoadTextures();
-    enemy_spawner.PlaceSpawner(grid);
-    enemy_spawner.SetTarget(spire.GetCenterX(), spire.GetCenterY());
+    enemySpawner.LoadTextures();
+    enemySpawner.PlaceSpawner(grid);
+    enemySpawner.SetTarget(spire.GetCenterX(), spire.GetCenterY());
 
     obstacles.LoadTextures();
     obstacles.GenerateObstacles(grid);
+
+    wall.LoadTextures();
+    mouseHandler = new HandleMouse(grid, enemySpawner, wall, spire);
 }
 
 void Game::Run()
@@ -36,7 +39,8 @@ void Game::Run()
 
 void Game::Update(float deltaTime)
 {
-    enemy_spawner.Update(deltaTime, grid);
+    enemySpawner.Update(deltaTime, grid, spire);
+    mouseHandler->UpdateMouse();
 }
 
 void Game::Draw()
@@ -46,14 +50,18 @@ void Game::Draw()
 
     grid.DrawGrid();
     spire.Draw();
-    enemy_spawner.DrawSpawner();
-    enemy_spawner.DrawEnemies();
+    enemySpawner.DrawSpawner();
+    enemySpawner.DrawEnemies();
     obstacles.DrawObstacles();
+    wall.DrawWalls();
 
     EndDrawing();
 }
 
 void Game::Shutdown()
 {
+    delete mouseHandler;
+    mouseHandler = nullptr;
+
     CloseWindow();
 }

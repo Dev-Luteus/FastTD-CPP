@@ -20,11 +20,12 @@ private:
     static constexpr int OBSTACLES_MAX_AMOUNT { 10 };
     static constexpr int OBSTACLE_SIZE { 2 }; // 2x2
     static constexpr int OBSTACLES_PADDING { 2 };
+    static constexpr int OBSTACLES_VALUE_ID { 10 };
 
     std::array<Texture2D, OBSTACLES_MAX_TEXTURES> obstacleTextures;
     std::vector<ObstaclePos> obstaclePositions;
 
-    bool IsPositionValid(int x, int y, const Grid& grid) const;
+    [[nodiscard]] bool IsPositionValid(int x, int y, const Grid& grid) const;
     bool BoundsPadding(int& x, int& y, const Grid& grid) const;
 
 public:
@@ -34,6 +35,11 @@ public:
     void LoadTextures();
     void GenerateObstacles(Grid& grid);
     void DrawObstacles() const;
+
+    [[nodiscard]] bool GetObstacleValueId()
+    {
+        return OBSTACLES_VALUE_ID;
+    }
 };
 
 #endif //MAP_H

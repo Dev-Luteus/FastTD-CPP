@@ -64,6 +64,9 @@ public:
 
     void SetTarget(int x, int y);
     [[nodiscard]] bool HasTarget() const;
+
+    std::vector<PathNode> CalculatePath(int startX, int startY) const;
+    void CalculatePaths();
 };
 
 #endif //ENEMYSPAWNER_H

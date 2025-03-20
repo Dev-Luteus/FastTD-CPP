@@ -118,13 +118,7 @@ void EnemySpawner::SpawnEnemies(Grid &grid)
     if (hasTarget && pathFinder != nullptr)
     {
         // Calculate path
-        std::vector<PathNode> path = pathFinder->FindPath
-        (
-            spawnPoint.x,
-            spawnPoint.y,
-            targetX,
-            targetY
-        );
+        std::vector<PathNode> path = CalculatePath(spawnPoint.x, spawnPoint.y);
 
         if (!path.empty())
         {
@@ -136,6 +130,45 @@ void EnemySpawner::SpawnEnemies(Grid &grid)
         {
             printf("No path found for enemy from (%d, %d) to (%d, %d)\n",
                    spawnPoint.x, spawnPoint.y, targetX, targetY);
+        }
+    }
+}
+
+std::vector<PathNode> EnemySpawner::CalculatePath(int startX, int startY) const
+{
+    if (hasTarget && pathFinder != nullptr)
+    {
+        return pathFinder->FindPath(startX, startY, targetX, targetY);
+    }
+
+    return {}; // List initialization, returns empty node!
+}
+
+void EnemySpawner::CalculatePaths()
+{
+    if (!hasTarget || pathFinder == nullptr)
+    {
+        return;
+    }
+
+    for (Enemy* enemy : enemies)
+    {
+        if (!enemy->HasReachedGoal())
+        {
+            int currentX = enemy->GetGridX();
+            int currentY = enemy->GetGridY();
+
+            std::vector<PathNode> path = CalculatePath(currentX, currentY);
+
+            if (!path.empty())
+            {
+                enemy->SetPath(path);
+            }
+            else
+            {
+                printf("No path found for enemy from (%d, %d) to (%d, %d) after wall placement\n",
+                       currentX, currentY, targetX, targetY);
+            }
         }
     }
 }

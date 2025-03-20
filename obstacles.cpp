@@ -1,6 +1,8 @@
 ﻿#include "obstacles.h"
 #include <string>
 
+#include "handleMouse.h"
+
 Obstacles::~Obstacles()
 {
     for (int i = 0; i < OBSTACLES_MAX_TEXTURES; ++i)
@@ -64,7 +66,7 @@ bool Obstacles::IsPositionValid(int x, int y, const Grid& grid) const
                 continue;
             }
 
-            if (grid.GetCell(checkX, checkY).valueId == 10)
+            if (grid.GetCell(checkX, checkY).valueId == OBSTACLES_VALUE_ID)
             {
                 return false;
             }
@@ -137,7 +139,7 @@ void Obstacles::GenerateObstacles(Grid& grid)
                 for (int dx = 0; dx < OBSTACLE_SIZE; ++dx)
                 {
                     Cell& cell = grid.ModifyCell(x + dx, y + dy);
-                    cell.valueId = 10;
+                    cell.valueId = OBSTACLES_VALUE_ID;
                     cell.spriteId = textureId;
                 }
             }

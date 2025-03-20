@@ -25,6 +25,9 @@ add_executable(FastTD main.cpp
         include/PathFinder.h
         pathFinder.cpp
         include/wall.h
+        wall.cpp
+        include/handleMouse.h
+        handleMouse.cpp
 )
 
 # Link Raylib library (and required Windows libraries)

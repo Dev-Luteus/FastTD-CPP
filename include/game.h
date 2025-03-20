@@ -5,6 +5,8 @@
 #include "obstacles.h"
 #include "spire.h"
 #include "enemySpawner.h"
+#include "handleMouse.h"
+#include "wall.h"
 
 class Game
 {
@@ -16,7 +18,9 @@ private:
     Grid grid;
     Spire spire;
     Obstacles obstacles;
-    EnemySpawner enemy_spawner;
+    EnemySpawner enemySpawner;
+    Wall wall;
+    HandleMouse* mouseHandler;
 
     void Draw();
     void Update(float deltaTime);
@@ -26,8 +30,6 @@ public:
     void Initialize();
     void Run();
     void Shutdown();
-    void HandleInput();
-    void PlaceWall(int gridX, int gridY);
 };
 
 #endif //GAME_H
