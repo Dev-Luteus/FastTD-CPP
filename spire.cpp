@@ -44,7 +44,7 @@ void Spire::Draw() const
 
 int Spire::GetCenterX() const
 {
-    return gridX + SPIRE_SIZE / 2;
+    return gridX;
 }
 
 int Spire::GetCenterY() const

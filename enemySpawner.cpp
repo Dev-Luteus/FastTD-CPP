@@ -75,7 +75,7 @@ void EnemySpawner::DrawSpawner() const
     }
 }
 
-void EnemySpawner::Update(float deltaTime, Grid &grid)
+void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire)
 {
     spawnTimer += deltaTime;
 
@@ -101,12 +101,13 @@ void EnemySpawner::Update(float deltaTime, Grid &grid)
          * enemy : Assign the pointer to the enemy variable,
          */
         Enemy* enemy = *it;
-        enemy->Update(deltaTime, grid);
+        enemy->Update(deltaTime, grid, spire);
 
-        if (enemy->HasReachedGoal())
-        {
-            // TODO: Stop Movement, switch to Attack(); phase, Damage Spire
-        }
+        // for now, all of this ( attack etc ) is in Enemy.cpp. Not sure if I need this if statement yet
+        // if (enemy->HasReachedGoal())
+        // {
+        //     //enemy->Attack();
+        // }
     }
 }
 

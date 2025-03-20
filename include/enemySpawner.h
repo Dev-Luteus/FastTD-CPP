@@ -13,6 +13,8 @@
  */
 class Enemy;
 
+class Spire;
+
 class EnemySpawner
 {
 private:
@@ -56,7 +58,7 @@ public:
     void PlaceSpawner(Grid& grid);
     void DrawSpawner() const;
 
-    void Update(float deltaTime, Grid& grid);
+    void Update(float deltaTime, Grid& grid, Spire& spire);
     void SpawnEnemies(Grid& grid);
     void DrawEnemies() const;
 

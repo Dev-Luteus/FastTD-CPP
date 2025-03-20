@@ -1,6 +1,8 @@
 ﻿#include "enemy.h"
 #include <stdexcept>
 
+#include "spire.h"
+
 Enemy::Enemy(int startX, int startY)
     : gridX(startX), gridY(startY), targetGridX(startX), targetGridY(startY)
 {
@@ -25,15 +27,23 @@ void Enemy::LoadTextures()
     }
 }
 
-void Enemy::Update(float deltaTime, Grid &grid)
+void Enemy::Update(float deltaTime, Grid &grid, Spire& spire)
 {
     movementTimer += deltaTime;
 
-    while (movementTimer >= MOVE_SPEED)
+    while (movementTimer >= ENEMY_MOVE_SPEED)
     {
         movementTimer = 0.0f;
 
-        FollowPath();
+        if (!HasReachedGoal())
+        {
+            FollowPath();
+        }
+
+        if (HasReachedGoal())
+        {
+            Attack(spire);
+        }
     }
 }
 
@@ -48,6 +58,11 @@ void Enemy::FollowPath()
     }
 }
 
+void Enemy::Attack(Spire& spire)
+{
+    spire.ModifyHealth(ENEMY_DAMAGE);
+}
+
 void Enemy::Draw() const
 {
     if (texture.id != 0)
@@ -55,7 +70,7 @@ void Enemy::Draw() const
         auto screenX = static_cast<float>(gridX * Cell::CELL_SIZE);
         auto screenY = static_cast<float>(gridY * Cell::CELL_SIZE);
 
-        Vector2 position = { screenX, screenY };
+        Vector2 position = {screenX, screenY};
 
         // 32x, 38y ( bad but works)
         SetTextureFilter(texture, TEXTURE_FILTER_POINT);
@@ -70,7 +85,7 @@ void Enemy::SetPath(const std::vector<PathNode> &newPath)
 
     if (!newPath.empty())
     {
-        const PathNode& destination = newPath.back(); // .back() = final destination!
+        const PathNode &destination = newPath.back(); // .back() = final destination!
         targetGridX = destination.x;
         targetGridY = destination.y;
     }

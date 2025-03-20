@@ -26,6 +26,8 @@ public:
     void Initialize();
     void Run();
     void Shutdown();
+    void HandleInput();
+    void PlaceWall(int gridX, int gridY);
 };
 
 #endif //GAME_H
