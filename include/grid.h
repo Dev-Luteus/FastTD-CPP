@@ -9,8 +9,10 @@ class Grid
 {
 private:
     static constexpr int MAX_GRID_TEXTURES { 11 };
-    static constexpr int GRID_WIDTH { 21 };
-    static constexpr int GRID_HEIGHT { 15 };
+    static constexpr int GRID_WIDTH { 40 };
+    static constexpr int GRID_HEIGHT { 40 };
+    static constexpr int VISIBLE_GRID_WIDTH { 27 };
+    static constexpr int VISIBLE_GRID_HEIGHT { 17 };
 
     void CheckBounds(int x, int y) const;
     void DrawCell(int id, int x, int y) const;
@@ -33,6 +35,8 @@ public:
 
     [[nodiscard]] static constexpr int GetWidth() { return GRID_WIDTH; }
     [[nodiscard]] static constexpr int GetHeight() { return GRID_HEIGHT; }
+    [[nodiscard]] static constexpr int GetVisibleWidth() { return VISIBLE_GRID_WIDTH; }
+    [[nodiscard]] static constexpr int GetVisibleHeight() { return VISIBLE_GRID_HEIGHT; }
 };
 
 #endif //GRID_H

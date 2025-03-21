@@ -5,12 +5,13 @@
 #include "obstacles.h"
 #include "spire.h"
 #include "enemySpawner.h"
+#include "gameCamera.h"
 #include "handleMouse.h"
 #include "wall.h"
 
 class Game
 {
-// this private: is unnecessary, but I will include it in every file
+// this private: accessor is unnecessary, but I will include it in every file
 private:
     static constexpr int SCREEN_WIDTH { 1920 };
     static constexpr int SCREEN_HEIGHT { 1080 };
@@ -20,12 +21,14 @@ private:
     Obstacles obstacles;
     EnemySpawner enemySpawner;
     Wall wall;
-    HandleMouse* mouseHandler;
+    HandleMouse* mouseHandler { nullptr };
+    GameCamera camera;
 
     void Draw();
     void Update(float deltaTime);
+    void DrawUI();
 public:
-    Game() = default; // Default Constructor no args ( if no args = use default )
+    Game();
 
     void Initialize();
     void Run();

@@ -4,7 +4,8 @@
 #include "spire.h"
 
 Enemy::Enemy(int startX, int startY)
-    : gridX(startX), gridY(startY), targetGridX(startX), targetGridY(startY)
+    : gridX(startX), gridY(startY), lastGridX(startX), lastGridY(startY), 
+      targetGridX(startX), targetGridY(startY)
 {
     LoadTextures();
 }
@@ -30,16 +31,24 @@ void Enemy::LoadTextures()
 void Enemy::Update(float deltaTime, Grid &grid, Spire& spire)
 {
     movementTimer += deltaTime;
+    lerpAmount = movementTimer / ENEMY_MOVE_SPEED;
 
-    while (movementTimer >= ENEMY_MOVE_SPEED)
+    if (lerpAmount > 1.0f)
     {
-        movementTimer = 0.0f;
+        lerpAmount = 1.0f;
 
         if (!HasReachedGoal())
         {
-            FollowPath();
-        }
+            // Here, we update our last position for lerping =)
+            lastGridX = gridX;
+            lastGridY = gridY;
 
+            FollowPath();
+
+            movementTimer = 0.0f;
+            lerpAmount = 0.0f;
+        }
+        
         if (HasReachedGoal())
         {
             Attack(spire);
@@ -63,14 +72,28 @@ void Enemy::Attack(Spire& spire)
     spire.ModifyHealth(ENEMY_DAMAGE);
 }
 
+float Enemy::GetLerpedX() const
+{
+    return static_cast<float>(lastGridX) + (gridX - lastGridX) * lerpAmount;
+}
+
+float Enemy::GetLerpedY() const
+{
+    return static_cast<float>(lastGridY) + (gridY - lastGridY) * lerpAmount;
+}
+
 void Enemy::Draw() const
 {
     if (texture.id != 0)
     {
-        auto screenX = static_cast<float>(gridX * Cell::CELL_SIZE);
-        auto screenY = static_cast<float>(gridY * Cell::CELL_SIZE);
+        float lerpedX = GetLerpedX();
+        float lerpedY = GetLerpedY();
+        
+        // Grid -> screen coordinates ( auto cause compiler complained )
+        auto screenX = static_cast<float>(lerpedX * Cell::CELL_SIZE);
+        auto screenY = static_cast<float>(lerpedY * Cell::CELL_SIZE);
 
-        Vector2 position = {screenX, screenY};
+        Vector2 position = { screenX, screenY };
 
         // 32x, 38y ( bad but works)
         SetTextureFilter(texture, TEXTURE_FILTER_POINT);
@@ -82,9 +105,21 @@ void Enemy::SetPath(const std::vector<PathNode> &newPath)
 {
     path = newPath; // calculated path
     currentPathIndex = 0;
-
+    movementTimer = 0.0f;
+    lerpAmount = 0.0f;
+    
     if (!newPath.empty())
     {
+        lastGridX = gridX;
+        lastGridY = gridY;
+
+        if (currentPathIndex < path.size())
+        {
+            gridX = path[currentPathIndex].x;
+            gridY = path[currentPathIndex].y;
+            currentPathIndex++;
+        }
+        
         const PathNode &destination = newPath.back(); // .back() = final destination!
         targetGridX = destination.x;
         targetGridY = destination.y;

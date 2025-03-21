@@ -28,6 +28,8 @@ add_executable(FastTD main.cpp
         wall.cpp
         include/handleMouse.h
         handleMouse.cpp
+        include/gameCamera.h
+        gameCamera.cpp
 )
 
 # Link Raylib library (and required Windows libraries)

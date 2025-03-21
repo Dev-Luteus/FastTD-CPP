@@ -15,8 +15,12 @@ private:
     Texture2D texture { 0 };
     int gridX;
     int gridY;
+    int lastGridX;
+    int lastGridY;
     float movementTimer { 0.0f };
+    float lerpAmount { 0.0f };
 
+    // Path
     std::vector<PathNode> path; // store final path
     size_t currentPathIndex { 0 }; // size_t for convenience
 
@@ -35,6 +39,8 @@ public:
     void FollowPath();
     void Attack(Spire& spire);
 
+    [[nodiscard]] float GetLerpedX() const;
+    [[nodiscard]] float GetLerpedY() const;
     [[nodiscard]] bool HasReachedGoal() const;
     [[nodiscard]] int GetGridX() const { return gridX; }
     [[nodiscard]] int GetGridY() const { return gridY; }

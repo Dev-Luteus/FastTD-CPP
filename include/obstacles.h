@@ -36,10 +36,7 @@ public:
     void GenerateObstacles(Grid& grid);
     void DrawObstacles() const;
 
-    [[nodiscard]] bool GetObstacleValueId()
-    {
-        return OBSTACLES_VALUE_ID;
-    }
+    [[nodiscard]] bool GetObstacleValueId() { return OBSTACLES_VALUE_ID; }
 };
 
 #endif //MAP_H
