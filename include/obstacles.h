@@ -17,9 +17,9 @@ class Obstacles
 {
 private:
     static constexpr int OBSTACLES_MAX_TEXTURES { 4 };
-    static constexpr int OBSTACLES_MAX_AMOUNT { 10 };
+    static constexpr int OBSTACLES_MAX_AMOUNT { 20 };
     static constexpr int OBSTACLE_SIZE { 2 }; // 2x2
-    static constexpr int OBSTACLES_PADDING { 2 };
+    static constexpr int OBSTACLES_PADDING { 4 };
     static constexpr int OBSTACLES_VALUE_ID { 10 };
 
     std::array<Texture2D, OBSTACLES_MAX_TEXTURES> obstacleTextures;

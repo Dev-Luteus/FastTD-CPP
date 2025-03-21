@@ -1,8 +1,10 @@
 ﻿#include "handleMouse.h"
 #include <raylib.h>
 
-HandleMouse::HandleMouse(Grid& grid, EnemySpawner& enemySpawner, Wall& wall, Spire& spire)
-    : grid(grid), enemySpawner(enemySpawner), wall(wall), spire(spire)
+#include "gameCamera.h"
+
+HandleMouse::HandleMouse(Grid& grid, EnemySpawner& enemySpawner, Wall& wall, Spire& spire, GameCamera& camera)
+    : grid(grid), enemySpawner(enemySpawner), wall(wall), spire(spire), camera(camera)
 {
 }
 
@@ -35,14 +37,15 @@ void HandleMouse::UpdateMouse()
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         Vector2 mousePos = GetMousePosition();
+        Vector2 worldPos = GetScreenToWorld2D(mousePos, camera.GetCamera());
 
-        int gridX = GetGridX(static_cast<int>(mousePos.x));
-        int gridY = GetGridY(static_cast<int>(mousePos.y));
+        int gridX = static_cast<int>(worldPos.x) / Cell::CELL_SIZE;
+        int gridY = static_cast<int>(worldPos.y) / Cell::CELL_SIZE;
 
         if (IsValidPlacement(gridX, gridY))
         {
             wall.PlaceWall(grid, gridX, gridY);
-            enemySpawner.CalculatePaths(); // This method needs to be added to EnemySpawner
+            enemySpawner.CalculatePaths();
         }
     }
 }

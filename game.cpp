@@ -27,7 +27,8 @@ void Game::Initialize()
     obstacles.GenerateObstacles(grid);
 
     wall.LoadTextures();
-    mouseHandler = new HandleMouse(grid, enemySpawner, wall, spire);
+    mouseHandler = new HandleMouse(grid, enemySpawner, wall, spire, camera);
+    camera.SetPosition(spire.GetCenterX() * Cell::CELL_SIZE, spire.GetCenterY() * Cell::CELL_SIZE);
 }
 
 void Game::Run()
@@ -76,7 +77,13 @@ void Game::DrawUI()
     int uiWidth = SCREEN_WIDTH - (Grid::GetVisibleWidth() * Cell::CELL_SIZE);
 
     DrawRectangle(SCREEN_WIDTH - uiWidth, 0, uiWidth, SCREEN_HEIGHT, LIGHTGRAY);
-    DrawText("Game UI", SCREEN_WIDTH - uiWidth + 10, 10, 20, BLACK);
+    DrawText("Game UI", SCREEN_WIDTH - uiWidth + 10, 10, 26, BLACK);
+
+    DrawText("Move Camera:", SCREEN_WIDTH - uiWidth + 10, 100, 26, BLACK);
+    DrawText("WASD", SCREEN_WIDTH - uiWidth + 10, 130, 26, BLACK);
+
+    DrawText("Place Wall:", SCREEN_WIDTH - uiWidth + 10, 200, 26, BLACK);
+    DrawText("Left Click", SCREEN_WIDTH - uiWidth + 10, 230, 26, BLACK);
 }
 
 void Game::Shutdown()
