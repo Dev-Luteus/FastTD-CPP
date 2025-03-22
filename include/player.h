@@ -18,7 +18,7 @@ public:
     {
         if (roundManager.GetRoundState() == RoundManager::BUILDING)
         {
-            roundManager.SetRoundState(RoundManager::DEFENDING);
+            roundManager.StartNewRound();
         }
     }
 };

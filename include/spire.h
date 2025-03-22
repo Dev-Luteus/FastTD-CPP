@@ -27,11 +27,9 @@ public:
 
     [[nodiscard]] int GetCenterX() const;
     [[nodiscard]] int GetCenterY() const;
+    [[nodiscard]] int GetHealth() const { return SPIRE_HEALTH; }
 
-    [[nodiscard]] int GetSpireId()
-    {
-        return SPIRE_SPRITE_ID;
-    }
+    [[nodiscard]] int GetSpireId() { return SPIRE_SPRITE_ID; }
 
     void ModifyHealth(int damage)
     {

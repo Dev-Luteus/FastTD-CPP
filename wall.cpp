@@ -32,16 +32,16 @@ void Wall::LoadTextures()
 
 /* I decided to Store our wall positions, and then draw them in Game!
  */
-void Wall::PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int gridX, int gridY)
+bool Wall::PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int gridX, int gridY)
 {
-    if (roundManager.GetRoundState() != RoundManager::BUILDING )
+    if (roundManager.GetRoundState() != RoundManager::BUILDING)
     {
-        return;
+        return false;
     }
 
-    if (player.GetCurrency() > WALL_COST)
+    if (player.GetCurrency() < WALL_COST)
     {
-        return;
+        return false;
     }
 
     player.SetCurrency(-WALL_COST);
@@ -49,8 +49,9 @@ void Wall::PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int
 
     Cell& cell = grid.ModifyCell(gridX, gridY);
     cell.valueId = WALL_VALUE_ID;
-
     wallPositions.push_back({ gridX, gridY });
+
+    return true;
 }
 
 void Wall::DrawWalls() const

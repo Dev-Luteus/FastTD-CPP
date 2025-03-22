@@ -27,6 +27,8 @@ private:
     int targetGridX;
     int targetGridY;
 
+    bool isDead { false };
+
 public:
     Enemy(int startX, int startY);
     ~Enemy();
@@ -34,16 +36,26 @@ public:
     void LoadTextures();
     void Update(float deltaTime, Grid& grid, Spire& spire);
     void Draw() const;
+    void Attack(Spire& spire);
 
     void SetPath(const std::vector<PathNode>& newPath);
     void FollowPath();
-    void Attack(Spire& spire);
+
+    // To fix enemies teleporting
+    bool CanRecalculatePath() const
+    {
+        return lerpAmount >= 0.99f || lerpAmount == 0.0f;
+    }
+    void RecalculatePath(const std::vector<PathNode>& newPath);
 
     [[nodiscard]] float GetLerpedX() const;
     [[nodiscard]] float GetLerpedY() const;
     [[nodiscard]] bool HasReachedGoal() const;
     [[nodiscard]] int GetGridX() const { return gridX; }
     [[nodiscard]] int GetGridY() const { return gridY; }
+
+    void MarkAsDead() { isDead = true; }
+    [[nodiscard]] bool IsDead() const { return isDead; }
 };
 
 #endif //ENEMY_H

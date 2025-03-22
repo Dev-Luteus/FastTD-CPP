@@ -70,6 +70,7 @@ void Enemy::FollowPath()
 void Enemy::Attack(Spire& spire)
 {
     spire.ModifyHealth(ENEMY_DAMAGE);
+    MarkAsDead();
 }
 
 float Enemy::GetLerpedX() const
@@ -105,9 +106,11 @@ void Enemy::SetPath(const std::vector<PathNode> &newPath)
 {
     path = newPath; // calculated path
     currentPathIndex = 0;
-    movementTimer = 0.0f;
-    lerpAmount = 0.0f;
-    
+
+    // Setting to 0.9 to speed up movement after spawning ( bug after lerping )
+    movementTimer = ENEMY_MOVE_SPEED * 0.9f;
+    lerpAmount = 0.9f;
+
     if (!newPath.empty())
     {
         lastGridX = gridX;
@@ -119,11 +122,56 @@ void Enemy::SetPath(const std::vector<PathNode> &newPath)
             gridY = path[currentPathIndex].y;
             currentPathIndex++;
         }
-        
+
         const PathNode &destination = newPath.back(); // .back() = final destination!
         targetGridX = destination.x;
         targetGridY = destination.y;
     }
+}
+
+void Enemy::RecalculatePath(const std::vector<PathNode>& newPath)
+{
+    if (newPath.empty())
+    {
+        return;
+    }
+
+    int currentX = gridX;
+    int currentY = gridY;
+
+    // Recalculate
+    size_t closestNodeIndex = 0;
+    int minDistance = INT_MAX;
+
+    for (size_t i = 0; i < newPath.size(); i++)
+    {
+        int dx = newPath[i].x - currentX;
+        int dy = newPath[i].y - currentY;
+        int distance = dx * dx + dy * dy;
+
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            closestNodeIndex = i;
+        }
+    }
+
+    path = newPath;
+    currentPathIndex = closestNodeIndex;
+
+    if (currentX != newPath[closestNodeIndex].x || currentY != newPath[closestNodeIndex].y)
+    {
+        lastGridX = currentX;
+        lastGridY = currentY;
+        gridX = newPath[closestNodeIndex].x;
+        gridY = newPath[closestNodeIndex].y;
+        movementTimer = 0.0f;
+        lerpAmount = 0.0f;
+    }
+
+    const PathNode &destination = newPath.back();
+    targetGridX = destination.x;
+    targetGridY = destination.y;
 }
 
 bool Enemy::HasReachedGoal() const

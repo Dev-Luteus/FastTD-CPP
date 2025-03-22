@@ -83,12 +83,21 @@ void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManage
         return;
     }
 
-    spawnTimer += deltaTime;
-
-    if (spawnTimer >= ENEMY_SPAWNER_INTERVAL)
+    if (roundManager.CanSpawnEnemy())
     {
-        SpawnEnemies(grid);
-        spawnTimer = 0.0f;
+        spawnTimer += deltaTime;
+
+        if (spawnTimer >= ENEMY_SPAWNER_INTERVAL)
+        {
+            SpawnEnemies(grid);
+            spawnTimer = 0.0f;
+            roundManager.EnemySpawned();
+        }
+    }
+
+    if (roundManager.AllEnemiesSpawned() && enemies.empty())
+    {
+        roundManager.EndRound();
     }
 
     /* Iterator loop: iterates the Enemy vector enemies,
@@ -100,7 +109,10 @@ void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManage
      * 1. Iterate to the end,
      * 2. end() => Returns an iterator pointing to the last element of the vector,
      */
-    for (auto it = enemies.begin(); it != enemies.end(); ++it)
+
+    auto it = enemies.begin();
+
+    while (it != enemies.end())
     {
         /* Enemy* enemy = *it:
          * *it : Dereference the iterator to get the Enemy pointer,
@@ -109,11 +121,15 @@ void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManage
         Enemy* enemy = *it;
         enemy->Update(deltaTime, grid, spire);
 
-        // for now, all of this ( attack etc ) is in Enemy.cpp. Not sure if I need this if statement yet
-        // if (enemy->HasReachedGoal())
-        // {
-        //     //enemy->Attack();
-        // }
+        if (enemy->IsDead())
+        {
+            delete enemy;
+            it = enemies.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
     }
 }
 
@@ -150,6 +166,7 @@ std::vector<PathNode> EnemySpawner::CalculatePath(int startX, int startY) const
     return {}; // List initialization, returns empty node!
 }
 
+/* TODO (BUG): Adding lerping made enemies lerp their first move. ( making them slower )*/
 void EnemySpawner::CalculatePaths()
 {
     if (!hasTarget || pathFinder == nullptr)
@@ -159,7 +176,7 @@ void EnemySpawner::CalculatePaths()
 
     for (Enemy* enemy : enemies)
     {
-        if (!enemy->HasReachedGoal())
+        if (!enemy->HasReachedGoal() && !enemy->IsDead() && enemy->CanRecalculatePath())
         {
             int currentX = enemy->GetGridX();
             int currentY = enemy->GetGridY();
@@ -168,7 +185,7 @@ void EnemySpawner::CalculatePaths()
 
             if (!path.empty())
             {
-                enemy->SetPath(path);
+                enemy->RecalculatePath(path);
             }
             else
             {

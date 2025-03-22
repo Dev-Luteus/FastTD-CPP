@@ -18,7 +18,11 @@ private:
     Player& player;
     RoundManager& roundManager;
 
+    const int SCREEN_WIDTH;
+    const int UI_WIDTH;
+
     [[nodiscard]] bool IsValidPlacement(int gridX, int gridY) const;
+    [[nodiscard]] bool IsInsideUI(Vector2 mousePos) const;
 
     [[nodiscard]] int GetGridX(int screenX) const;
     [[nodiscard]] int GetGridY(int screenY) const;
@@ -26,7 +30,7 @@ private:
 public:
     HandleMouse(Grid& grid, EnemySpawner& enemySpawner,
         Wall& wall, Spire& spire, GameCamera& camera, Player& player,
-        RoundManager& roundManager);
+        RoundManager& roundManager, int screenWidth, int uiWidth);
 
     void UpdateMouse();
 };

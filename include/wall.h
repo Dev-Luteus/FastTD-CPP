@@ -28,7 +28,7 @@ public:
     ~Wall();
 
     void LoadTextures();
-    void PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int gridX, int gridY);
+    bool PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int gridX, int gridY);
     void DrawWalls() const;
 
     [[nodiscard]] int GetCost() { return WALL_COST; }
