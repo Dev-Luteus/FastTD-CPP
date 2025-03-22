@@ -17,12 +17,13 @@ private:
     int gridHeight { 0 };
     int visibleWidth { 0 };
     int visibleHeight { 0 };
+    int uiWidth { 0 };
 
     int cellSize { 0 }; // pixels
 
 public:
     GameCamera() = default; // We set the values in Game.Initialize()
-    GameCamera(int gridWidth, int gridHeight, int visibleWidth, int visibleHeight, int cellSize);
+    GameCamera(int gridWidth, int gridHeight, int visibleWidth, int visibleHeight, int cellSize, int uiWidth);
 
     void Update(float deltaTime);
     void BeginMode() const;

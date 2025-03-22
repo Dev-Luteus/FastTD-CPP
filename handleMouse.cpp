@@ -3,8 +3,10 @@
 
 #include "gameCamera.h"
 
-HandleMouse::HandleMouse(Grid& grid, EnemySpawner& enemySpawner, Wall& wall, Spire& spire, GameCamera& camera)
-    : grid(grid), enemySpawner(enemySpawner), wall(wall), spire(spire), camera(camera)
+HandleMouse::HandleMouse(Grid& grid, EnemySpawner& enemySpawner,
+    Wall& wall, Spire& spire, GameCamera& camera, Player& player, RoundManager& roundManager)
+    : grid(grid), enemySpawner(enemySpawner), wall(wall), spire(spire), camera(camera), player(player),
+      roundManager(roundManager)
 {
 }
 
@@ -44,7 +46,7 @@ void HandleMouse::UpdateMouse()
 
         if (IsValidPlacement(gridX, gridY))
         {
-            wall.PlaceWall(grid, gridX, gridY);
+            wall.PlaceWall(grid, player, roundManager, gridX, gridY);
             enemySpawner.CalculatePaths();
         }
     }

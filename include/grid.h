@@ -9,9 +9,9 @@ class Grid
 {
 private:
     static constexpr int MAX_GRID_TEXTURES { 11 };
-    static constexpr int GRID_WIDTH { 40 };
-    static constexpr int GRID_HEIGHT { 40 };
-    static constexpr int VISIBLE_GRID_WIDTH { 27 };
+    static constexpr int GRID_WIDTH { 41 };
+    static constexpr int GRID_HEIGHT { 41 };
+    static constexpr int VISIBLE_GRID_WIDTH { 25 };
     static constexpr int VISIBLE_GRID_HEIGHT { 17 };
 
     void CheckBounds(int x, int y) const;

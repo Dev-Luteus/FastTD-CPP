@@ -1,6 +1,7 @@
 ﻿#include "enemySpawner.h"
 #include <stdexcept>
 #include "enemy.h"
+#include "roundManager.h"
 
 EnemySpawner::EnemySpawner()
     : texture{0}, gridX{0}, gridY{0}, spawnTimer{0.0f},
@@ -75,8 +76,13 @@ void EnemySpawner::DrawSpawner() const
     }
 }
 
-void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire)
+void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManager& roundManager)
 {
+    if (roundManager.GetRoundState() != RoundManager::DEFENDING)
+    {
+        return;
+    }
+
     spawnTimer += deltaTime;
 
     if (spawnTimer >= ENEMY_SPAWNER_INTERVAL)

@@ -11,7 +11,7 @@ void Game::Initialize()
     camera = GameCamera(
         Grid::GetWidth(), Grid::GetHeight(),
         Grid::GetVisibleWidth(), Grid::GetVisibleHeight(),
-        Cell::CELL_SIZE);
+        Cell::CELL_SIZE, UI_WIDTH);
 
     grid.LoadTextures();
     grid.GenerateGrid();
@@ -27,7 +27,9 @@ void Game::Initialize()
     obstacles.GenerateObstacles(grid);
 
     wall.LoadTextures();
-    mouseHandler = new HandleMouse(grid, enemySpawner, wall, spire, camera);
+    roundManager.SetRoundState(RoundManager::BUILDING);
+
+    mouseHandler = new HandleMouse(grid, enemySpawner, wall, spire, camera, player, roundManager);
     camera.SetPosition(spire.GetCenterX() * Cell::CELL_SIZE, spire.GetCenterY() * Cell::CELL_SIZE);
 }
 
@@ -48,7 +50,7 @@ void Game::Run()
 void Game::Update(float deltaTime)
 {
     camera.Update(deltaTime);
-    enemySpawner.Update(deltaTime, grid, spire);
+    enemySpawner.Update(deltaTime, grid, spire, roundManager);
     mouseHandler->UpdateMouse();
 }
 
@@ -74,16 +76,51 @@ void Game::Draw()
 
 void Game::DrawUI()
 {
-    int uiWidth = SCREEN_WIDTH - (Grid::GetVisibleWidth() * Cell::CELL_SIZE);
+    int buttonWidth = 200;
+    int buttonHeight = 50;
+    int buttonX = SCREEN_WIDTH - UI_WIDTH + (UI_WIDTH - buttonWidth) / 2;
+    int buttonY = 300;
 
-    DrawRectangle(SCREEN_WIDTH - uiWidth, 0, uiWidth, SCREEN_HEIGHT, LIGHTGRAY);
-    DrawText("Game UI", SCREEN_WIDTH - uiWidth + 10, 10, 26, BLACK);
+    DrawRectangle(SCREEN_WIDTH - UI_WIDTH, 0, UI_WIDTH, SCREEN_HEIGHT, LIGHTGRAY);
+    DrawText("Game UI", SCREEN_WIDTH - UI_WIDTH + 10, 10, 26, BLACK);
 
-    DrawText("Move Camera:", SCREEN_WIDTH - uiWidth + 10, 100, 26, BLACK);
-    DrawText("WASD", SCREEN_WIDTH - uiWidth + 10, 130, 26, BLACK);
+    DrawText("Move Camera:", SCREEN_WIDTH - UI_WIDTH + 10, 100, 26, BLACK);
+    DrawText("WASD", SCREEN_WIDTH - UI_WIDTH + 10, 130, 26, BLACK);
 
-    DrawText("Place Wall:", SCREEN_WIDTH - uiWidth + 10, 200, 26, BLACK);
-    DrawText("Left Click", SCREEN_WIDTH - uiWidth + 10, 230, 26, BLACK);
+    DrawText("Place Wall:", SCREEN_WIDTH - UI_WIDTH + 10, 200, 26, BLACK);
+    DrawText("Left Click", SCREEN_WIDTH - UI_WIDTH + 10, 230, 26, BLACK);
+
+    const char* stateText = roundManager.GetRoundState() == RoundManager::BUILDING ?
+                           "Building Phase" : "Defending Phase";
+
+    DrawText(stateText, SCREEN_WIDTH - UI_WIDTH + 10, 270, 26, BLACK);
+
+    // Draw Button
+    Rectangle startRoundButton =
+    {
+        (float)buttonX,
+        (float)buttonY,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    auto buttonColour = GRAY;
+
+    Vector2 mousePoint = GetMousePosition();
+    bool isMouseOverButton = CheckCollisionPointRec(mousePoint, startRoundButton);
+
+    if (isMouseOverButton)
+    {
+        buttonColour = DARKGRAY;
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            player.StartRound(roundManager);
+        }
+    }
+
+    DrawRectangleRec(startRoundButton, buttonColour);
+    DrawText("Start Round", buttonX + 20, buttonY + 15, 20, WHITE);
 }
 
 void Game::Shutdown()

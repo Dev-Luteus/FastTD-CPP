@@ -15,6 +15,8 @@ private:
     Wall& wall;
     Spire& spire;
     GameCamera& camera;
+    Player& player;
+    RoundManager& roundManager;
 
     [[nodiscard]] bool IsValidPlacement(int gridX, int gridY) const;
 
@@ -22,7 +24,9 @@ private:
     [[nodiscard]] int GetGridY(int screenY) const;
 
 public:
-    HandleMouse(Grid& grid, EnemySpawner& enemySpawner, Wall& wall, Spire& spire, GameCamera& camera);
+    HandleMouse(Grid& grid, EnemySpawner& enemySpawner,
+        Wall& wall, Spire& spire, GameCamera& camera, Player& player,
+        RoundManager& roundManager);
 
     void UpdateMouse();
 };

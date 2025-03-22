@@ -1,34 +1,44 @@
 ﻿#include "gameCamera.h"
 #include <raymath.h>
 
-GameCamera::GameCamera(int gridWidth, int gridHeight, int visibleWidth, int visibleHeight, int cellSize)
+#include "cell.h"
+
+/* Updated this and spend 3 hours only to realize that the problem was not the camera.
+ * I thought it was assymetric, since I saw more to the left than I did to the right, because:
+ * - The spire is supposed to be in the middle.
+ *
+ * However, the spire is a 5x5, and my grid width and height was 40
+ * I had to correct it to 41..
+ */
+GameCamera::GameCamera(int gridWidth, int gridHeight, int visibleWidth, int visibleHeight, int cellSize, int uiWidth)
     : gridWidth(gridWidth), gridHeight(gridHeight),
       visibleWidth(visibleWidth), visibleHeight(visibleHeight),
-      cellSize(cellSize)
+      cellSize(cellSize), uiWidth(uiWidth)
 {
     // Basic camera init settings
     camera.target = { 0.0f, 0.0f };
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
-    // Center!
+    auto gameAreaWidth = static_cast<float>(GetScreenWidth() - uiWidth);
+    auto gameAreaHeight = static_cast<float>(GetScreenHeight());
+
     camera.offset =
     {
-        static_cast<float>(visibleWidth * cellSize) / 2.0f,
-        static_cast<float>(visibleHeight * cellSize) / 2.0f
+        gameAreaWidth / 2.0f,
+        gameAreaHeight / 2.0f
     };
 
-    auto visibleWidthPixels = static_cast<float>(visibleWidth * cellSize);
-    auto visibleHeightPixels = static_cast<float>(visibleHeight * cellSize);
-    auto totalWidthPixels = static_cast<float>(gridWidth * cellSize);
-    auto totalHeightPixels = static_cast<float>(gridHeight * cellSize);
+    auto totalWidth = static_cast<float>(gridWidth * cellSize);
+    auto totalHeight = static_cast<float>(gridHeight * cellSize);
 
-    minX = visibleWidthPixels / 2.0f;
-    minY = visibleHeightPixels / 2.0f;
-    maxX = totalWidthPixels - minX;
-    maxY = totalHeightPixels - minY;
+    minX = camera.offset.x;
+    maxX = totalWidth - (gameAreaWidth - camera.offset.x);
 
-    SetPosition(totalWidthPixels / 2.0f, totalHeightPixels / 2.0f);
+    minY = camera.offset.y;
+    maxY = totalHeight - camera.offset.y;
+
+    SetPosition(totalWidth / 2.0f, totalHeight / 2.0f);
 }
 
 void GameCamera::Update(float deltaTime)

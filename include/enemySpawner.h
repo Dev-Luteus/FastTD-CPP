@@ -5,6 +5,7 @@
 #include "grid.h"
 #include <vector>
 #include "pathFinder.h"
+#include "roundManager.h"
 
 /* Note to self, forward declare when:
  - Don't need to access its members or methods,
@@ -44,6 +45,9 @@ private:
     int targetY { 0 };
     bool hasTarget { false };
 
+    // rounds
+    int enemyCounter { 0 };
+
 public:
     struct SpawnPoint
     {
@@ -58,7 +62,7 @@ public:
     void PlaceSpawner(Grid& grid);
     void DrawSpawner() const;
 
-    void Update(float deltaTime, Grid& grid, Spire& spire);
+    void Update(float deltaTime, Grid& grid, Spire& spire, RoundManager& roundManager);
     void SpawnEnemies(Grid& grid);
     void DrawEnemies() const;
 
