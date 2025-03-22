@@ -9,7 +9,7 @@
 class Enemy
 {
 private:
-    static constexpr float ENEMY_MOVE_SPEED { 1.0f }; // X cell per second
+    static constexpr float ENEMY_MOVE_SPEED { 0.75f }; // X cell per second ( lower value = faster )
     static constexpr int ENEMY_DAMAGE { 5 };
 
     Texture2D texture { 0 };
