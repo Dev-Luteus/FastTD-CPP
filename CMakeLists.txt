@@ -32,6 +32,8 @@ add_executable(FastTD main.cpp
         gameCamera.cpp
         include/player.h
         include/roundManager.h
+        include/Logger.h
+        include/timer.h
 )
 
 # Link Raylib library (and required Windows libraries)
