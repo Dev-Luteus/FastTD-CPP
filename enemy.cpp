@@ -1,6 +1,7 @@
 ﻿#include "enemy.h"
 #include <stdexcept>
 
+#include "profileScope.h"
 #include "spire.h"
 
 Enemy::Enemy(int startX, int startY)
@@ -30,6 +31,8 @@ void Enemy::LoadTextures()
 
 void Enemy::Update(float deltaTime, Grid &grid, Spire& spire)
 {
+    PROFILE_ENEMY("Update");
+
     movementTimer += deltaTime;
     lerpAmount = movementTimer / ENEMY_MOVE_SPEED;
 
@@ -43,14 +46,17 @@ void Enemy::Update(float deltaTime, Grid &grid, Spire& spire)
             lastGridX = gridX;
             lastGridY = gridY;
 
-            FollowPath();
-
+            {
+                PROFILE_ENEMY("FollowPath");
+                FollowPath();
+            }
             movementTimer = 0.0f;
             lerpAmount = 0.0f;
         }
         
         if (HasReachedGoal())
         {
+            PROFILE_ENEMY("Attack");
             Attack(spire);
         }
     }
@@ -85,6 +91,8 @@ float Enemy::GetLerpedY() const
 
 void Enemy::Draw() const
 {
+    PROFILE_ENEMY("Draw");
+
     if (texture.id != 0)
     {
         float lerpedX = GetLerpedX();

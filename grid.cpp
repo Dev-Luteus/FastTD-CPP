@@ -1,6 +1,7 @@
 ﻿#include "grid.h"
 #include "cell.h"
 #include <stdexcept>
+#include "profileScope.h"
 
 Grid::~Grid()
 {
@@ -42,6 +43,8 @@ void Grid::GenerateGrid()
 
 void Grid::DrawGrid() const
 {
+    PROFILE_GRID("DrawAllCells");
+
     for (int y = 0; y < GRID_HEIGHT; ++y)
     {
         for (int x = 0; x < GRID_WIDTH; ++x)
@@ -53,6 +56,7 @@ void Grid::DrawGrid() const
         }
     }
 }
+
 
 void Grid::DrawCell(int id, int x, int y) const
 {

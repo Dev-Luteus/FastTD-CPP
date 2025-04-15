@@ -1,8 +1,8 @@
-﻿#include "handleMouse.h"
-#include <raylib.h>
-
-#include "game.h"
+﻿#include <raylib.h>
+#include "handleMouse.h"
 #include "gameCamera.h"
+#include "game.h"
+#include "profileScope.h"
 
 /* I hate this constructor ( beginner at c++ )
  */
@@ -30,6 +30,8 @@ int HandleMouse::GetGridY(int screenY) const
 
 bool HandleMouse::IsValidPlacement(int gridX, int gridY) const
 {
+    PROFILE_GAME("Mouse.CheckPlacement");
+
     // Check grid bounds
     if (gridX < 0 || gridX >= Grid::GetWidth() ||
         gridY < 0 || gridY >= Grid::GetHeight())
@@ -49,6 +51,8 @@ bool HandleMouse::IsInsideUI(Vector2 mousePos) const
 
 void HandleMouse::UpdateMouse()
 {
+    PROFILE_GAME("Mouse.Update");
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         Vector2 mousePos = GetMousePosition();
@@ -65,10 +69,16 @@ void HandleMouse::UpdateMouse()
 
         if (IsValidPlacement(gridX, gridY))
         {
-            bool wallPlaced = wall.PlaceWall(grid, player, roundManager, gridX, gridY);
+            bool wallPlaced;
+
+            {
+                PROFILE_GAME("Wall.Place");
+                wallPlaced = wall.PlaceWall(grid, player, roundManager, gridX, gridY);
+            }
 
             if (wallPlaced)
             {
+                PROFILE_PATHFIND("RecalculateAllPaths");
                 enemySpawner.CalculatePaths();
             }
         }

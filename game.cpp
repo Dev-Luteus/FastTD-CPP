@@ -1,12 +1,14 @@
 ﻿#include "raylib.h"
 #include "game.h"
-
 #include <string>
+#include "profileScope.h"
 
 Game::Game() = default;
 
 void Game::Initialize()
 {
+    PROFILE_FUNCTION();
+
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FastTD");
     SetTargetFPS(60);
 
@@ -39,6 +41,8 @@ void Game::Initialize()
 
 void Game::Run()
 {
+    PROFILE_FUNCTION();
+
     float deltaTime = 0.0f;
 
     while (!WindowShouldClose())
@@ -53,33 +57,85 @@ void Game::Run()
 
 void Game::Update(float deltaTime)
 {
-    camera.Update(deltaTime);
-    enemySpawner.Update(deltaTime, grid, spire, roundManager);
-    mouseHandler->UpdateMouse();
+    PROFILE_FUNCTION();
+
+    {
+        PROFILE_GAME("Camera.Update");
+        camera.Update(deltaTime);
+    }
+
+    {
+        PROFILE_ENEMY("EnemySpawner.Update");
+        enemySpawner.Update(deltaTime, grid, spire, roundManager);
+    }
+
+    {
+        PROFILE_GAME("MouseHandler.Update");
+        mouseHandler->UpdateMouse();
+    }
 }
 
 void Game::Draw()
 {
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
+    PROFILE_FUNCTION();
 
-    camera.BeginMode();
+    {
+        PROFILE_GAME("BeginFrame");
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+    }
 
-    grid.DrawGrid();
-    spire.Draw();
-    enemySpawner.DrawSpawner();
-    enemySpawner.DrawEnemies();
-    obstacles.DrawObstacles();
-    wall.DrawWalls();
+    {
+        PROFILE_GAME("WorldBegin");
+        camera.BeginMode();
 
-    camera.EndMode();
+        {
+            PROFILE_GRID("Draw");
+            grid.DrawGrid();
+        }
 
-    DrawUI(); // unrelated to camera
-    EndDrawing();
+        {
+            PROFILE_GAME("SpireDraw");
+            spire.Draw();
+        }
+
+        {
+            PROFILE_ENEMY("Draw");
+            enemySpawner.DrawSpawner();
+            enemySpawner.DrawEnemies();
+        }
+
+        {
+            PROFILE_GAME("ObstacleDraw");
+            obstacles.DrawObstacles();
+        }
+
+        {
+            PROFILE_GAME("WallDraw");
+            wall.DrawWalls();
+        }
+
+        {
+            PROFILE_GAME("WorldEnd");
+            camera.EndMode();
+        }
+    }
+
+    {
+        PROFILE_UI("Draw");
+        DrawUI();
+    }
+
+    {
+        PROFILE_GAME("EndFrame");
+        EndDrawing();
+    }
 }
 
 void Game::DrawUI()
 {
+    PROFILE_FUNCTION();
+
     DrawUIPanel();
     int currentY = 20;
 
@@ -94,7 +150,6 @@ void Game::DrawUI()
 
     DrawUIDivider(currentY);
     currentY += 30;
-
 
     currentY += 50; // spacing.
 
@@ -254,6 +309,8 @@ void Game::DrawUIHealth(int y)
 
 void Game::Shutdown()
 {
+    PROFILE_FUNCTION();
+
     delete mouseHandler;
     mouseHandler = nullptr;
 

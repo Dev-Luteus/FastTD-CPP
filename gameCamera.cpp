@@ -1,7 +1,7 @@
 ﻿#include "gameCamera.h"
-#include <raymath.h>
-
 #include "cell.h"
+#include "profileScope.h"
+#include <raymath.h>
 
 /* Updated this and spend 3 hours only to realize that the problem was not the camera.
  * I thought it was assymetric, since I saw more to the left than I did to the right, because:
@@ -43,39 +43,39 @@ GameCamera::GameCamera(int gridWidth, int gridHeight, int visibleWidth, int visi
 
 void GameCamera::Update(float deltaTime)
 {
-    Vector2 position = camera.target;
+    PROFILE_CAMERA("Update");
+
+    // Vector2 conflicts lead to me manipulating camera.target directly.
     bool moved = false;
 
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
     {
-        position.y -= CAMERA_MOVE_SPEED * deltaTime;
+        camera.target.y -= CAMERA_MOVE_SPEED * deltaTime;
         moved = true;
     }
 
     if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
     {
-        position.y += CAMERA_MOVE_SPEED * deltaTime;
+        camera.target.y += CAMERA_MOVE_SPEED * deltaTime;
         moved = true;
     }
 
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
     {
-        position.x -= CAMERA_MOVE_SPEED * deltaTime;
+        camera.target.x -= CAMERA_MOVE_SPEED * deltaTime;
         moved = true;
     }
 
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
     {
-        position.x += CAMERA_MOVE_SPEED * deltaTime;
+        camera.target.x += CAMERA_MOVE_SPEED * deltaTime;
         moved = true;
     }
 
     if (moved)
     {
-        position.x = Clamp(position.x, minX, maxX);
-        position.y = Clamp(position.y, minY, maxY);
-
-        camera.target = position;
+        camera.target.x = Clamp(camera.target.x, minX, maxX);
+        camera.target.y = Clamp(camera.target.y, minY, maxY);
     }
 }
 
@@ -89,10 +89,12 @@ void GameCamera::SetPosition(float x, float y)
 
 void GameCamera::BeginMode() const
 {
+    PROFILE_CAMERA("BeginMode");
     BeginMode2D(camera);
 }
 
 void GameCamera::EndMode() const
 {
+    PROFILE_CAMERA("EndMode");
     EndMode2D();
 }

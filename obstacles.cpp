@@ -1,7 +1,7 @@
 ﻿#include "obstacles.h"
 #include <string>
-
 #include "handleMouse.h"
+#include "profileScope.h"
 
 Obstacles::~Obstacles()
 {
@@ -119,6 +119,8 @@ bool Obstacles::BoundsPadding(int& x, int& y, const Grid& grid) const
 
 void Obstacles::GenerateObstacles(Grid& grid)
 {
+    PROFILE_OBSTACLE("Generate");
+
     obstaclePositions.clear();
 
     int placedObstacles = 0;
@@ -130,7 +132,13 @@ void Obstacles::GenerateObstacles(Grid& grid)
         int x = GetRandomValue(0, Grid::GetWidth() - OBSTACLE_SIZE);
         int y = GetRandomValue(0, Grid::GetHeight() - OBSTACLE_SIZE);
 
-        if (BoundsPadding(x, y, grid))
+        bool placed = false;
+        {
+            PROFILE_OBSTACLE("PlacementAttempt");
+            placed = BoundsPadding(x, y, grid);
+        }
+
+        if (placed)
         {
             int textureId = GetRandomValue(0, OBSTACLES_MAX_TEXTURES - 1);
 
@@ -163,6 +171,8 @@ void Obstacles::GenerateObstacles(Grid& grid)
 
 void Obstacles::DrawObstacles() const
 {
+    PROFILE_OBSTACLE("DrawAll");
+
     // Essentially a for-each loop! (Learning C++ syntax)
     for (const ObstaclePos& obstacle : obstaclePositions)
     {

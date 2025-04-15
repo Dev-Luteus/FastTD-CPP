@@ -2,11 +2,14 @@
 #include <algorithm>
 #include <cstdio>
 #include <list>
+#include "profileScope.h"
 
 PathFinder::PathFinder(Grid &grid) : grid(grid) { }
 
 std::vector<PathNode> PathFinder::FindPath(int startX, int startY, int endX, int endY)
 {
+    PROFILE_PATHFIND("FindPath");
+
     // Creating grid of nodes ( we can also store them )
     std::vector<PathNode> nodes(Grid::GetHeight() * Grid::GetWidth());
 
@@ -74,80 +77,87 @@ std::vector<PathNode> PathFinder::FindPath(int startX, int startY, int endX, int
     openList.push_back(startNode);
 
     // Main A*
-    while (!openList.empty())
     {
-        /* Sort List ( find node with lowest global value ) ( LAMBDA )
-         * C#: openList.Sort((a, b) => a.GlobalGoal.CompareTo(b.GlobalGoal));
-         */
-        openList.sort([] (const PathNode* a, const PathNode* b)
+        PROFILE_PATHFIND("Main A*");
+
+        while (!openList.empty())
         {
-            return a->globalGoal < b->globalGoal;
-        });
-
-        // Front node ( current best )
-        PathNode* currentNode; // .front() first element
-
-        // removed visited from front
-        while (!openList.empty() && openList.front()->isVisited)
-        {
-            openList.pop_front(); // pop - remove
-        }
-
-        // all nodes used, no path found
-        if (openList.empty())
-        {
-            printf("FRONT LIST EXHAUSTED: NO PATH FOUND");
-            break;
-        }
-
-        currentNode = openList.front();
-        currentNode->isVisited = true;
-
-        if (currentNode == endNode)
-        {
-            break;
-        }
-
-        // Check each neighbour
-        for (auto nodeNeighbor : currentNode->neighbors)
-        {
-            // analyze new
-            if (!nodeNeighbor->isVisited && !nodeNeighbor->isObstacle)
+            /* Sort List ( find node with lowest global value ) ( LAMBDA )
+             * C#: openList.Sort((a, b) => a.GlobalGoal.CompareTo(b.GlobalGoal));
+             */
+            openList.sort([] (const PathNode* a, const PathNode* b)
             {
-                openList.push_back(nodeNeighbor);
+                return a->globalGoal < b->globalGoal;
+            });
+
+            // Front node ( current best )
+            PathNode* currentNode; // .front() first element
+
+            // removed visited from front
+            while (!openList.empty() && openList.front()->isVisited)
+            {
+                openList.pop_front(); // pop - remove
             }
 
-            // Calculate new potential path length
-            float possibleLowerGoal = currentNode->localGoal +
-                CalculateDistance(currentNode, nodeNeighbor);
-
-            // If new path is shorter
-            if (possibleLowerGoal < nodeNeighbor->localGoal)
+            // all nodes used, no path found
+            if (openList.empty())
             {
-                // update parent to later define total path
-                nodeNeighbor->parent = currentNode;
-                nodeNeighbor->localGoal = possibleLowerGoal;
-                nodeNeighbor->globalGoal = nodeNeighbor->localGoal +
-                    CalculateHeuristic(nodeNeighbor, endNode);
+                printf("FRONT LIST EXHAUSTED: NO PATH FOUND");
+                break;
+            }
+
+            currentNode = openList.front();
+            currentNode->isVisited = true;
+
+            if (currentNode == endNode)
+            {
+                break;
+            }
+
+            // Check each neighbour
+            for (auto nodeNeighbor : currentNode->neighbors)
+            {
+                // analyze new
+                if (!nodeNeighbor->isVisited && !nodeNeighbor->isObstacle)
+                {
+                    openList.push_back(nodeNeighbor);
+                }
+
+                // Calculate new potential path length
+                float possibleLowerGoal = currentNode->localGoal +
+                    CalculateDistance(currentNode, nodeNeighbor);
+
+                // If new path is shorter
+                if (possibleLowerGoal < nodeNeighbor->localGoal)
+                {
+                    // update parent to later define total path
+                    nodeNeighbor->parent = currentNode;
+                    nodeNeighbor->localGoal = possibleLowerGoal;
+                    nodeNeighbor->globalGoal = nodeNeighbor->localGoal +
+                        CalculateHeuristic(nodeNeighbor, endNode);
+                }
             }
         }
     }
 
     // Reconstruct final path ( store the path objects )
     std::vector<PathNode> path;
-
-    if (endNode->parent != nullptr)
     {
-        PathNode* currentNode = endNode; // point current to end node
+        PROFILE_PATHFIND("Reconstruct Path");
 
-        while (currentNode != startNode)
+        if (endNode->parent != nullptr)
         {
-            path.push_back(*currentNode); // de-reference to get object ( this node )
-            currentNode = currentNode->parent;
-        }
+            PathNode* currentNode = endNode; // point current to end node
 
-        path.push_back(*startNode);
-        std::reverse(path.begin(), path.end()); // start to end path
+            while (currentNode != startNode)
+            {
+                path.push_back(*currentNode); // de-reference to get object
+                currentNode = currentNode->parent;
+            }
+
+            path.push_back(*startNode);
+            std::reverse(path.begin(), path.end()); // start to end path
+        }
     }
 
     return path;

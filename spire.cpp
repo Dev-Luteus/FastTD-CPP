@@ -1,4 +1,5 @@
 ﻿#include "spire.h"
+#include "profileScope.h"
 
 Spire::~Spire()
 {
@@ -30,6 +31,8 @@ void Spire::PlaceInCenter(Grid& grid)
 
 void Spire::Draw() const
 {
+    PROFILE_SPIRE("Draw");
+
     if (texture.id != 0)
     {
         float screenX = gridX * Cell::CELL_SIZE;

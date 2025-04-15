@@ -6,6 +6,8 @@
 std::map<std::string, Profiler::ProfileData> Profiler::timingProfile;
 FILE* Profiler::outputLog = nullptr;
 
+/* Open and create file, write header etc
+ */
 void Profiler::Init(const char *fileName)
 {
     outputLog = fopen(fileName, "w"); // writing mode
@@ -77,7 +79,9 @@ void Profiler::PrintSummary()
     fprintf(outputLog, "\n========== TIMING SUMMARY ==========\n");
     fprintf(outputLog, "%-30s | %15s | %6s | %15s | %15s | %15s\n",
             "Section", "Total Time (ms)", "Calls", "Avg Time (ms)", "Min Time (ms)", "Max Time (ms)");
-    fprintf(outputLog, "--------------------------------------------------------------------------------------------------\n");
+    fprintf(outputLog, "-------------------------------------------"
+                       "--------------------------------------------------"
+                       "------------------------\n");
 
     double grandTotal = 0.0;
 
@@ -93,7 +97,9 @@ void Profiler::PrintSummary()
         grandTotal += data.totalTimeMs;
     }
 
-    fprintf(outputLog, "--------------------------------------------------------------------------------------------------\n");
+    fprintf(outputLog, "-------------------------------------------"
+                       "--------------------------------------------------"
+                       "------------------------\n");
     fprintf(outputLog, "%-30s | %15.2f\n", "TOTAL", grandTotal);
 
     std::cout << "\nProfiling summary written to log file. Total measured time: "

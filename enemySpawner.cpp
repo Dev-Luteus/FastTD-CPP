@@ -1,6 +1,7 @@
 ﻿#include "enemySpawner.h"
 #include <stdexcept>
 #include "enemy.h"
+#include "profileScope.h"
 #include "roundManager.h"
 
 EnemySpawner::EnemySpawner()
@@ -78,6 +79,8 @@ void EnemySpawner::DrawSpawner() const
 
 void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManager& roundManager)
 {
+    PROFILE_ENEMY("Spawner.Update");
+
     if (roundManager.GetRoundState() != RoundManager::DEFENDING)
     {
         return;
@@ -89,6 +92,7 @@ void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManage
 
         if (spawnTimer >= ENEMY_SPAWNER_INTERVAL)
         {
+            PROFILE_ENEMY("Spawn Enemies");
             SpawnEnemies(grid);
             spawnTimer = 0.0f;
             roundManager.EnemySpawned();
@@ -110,37 +114,46 @@ void EnemySpawner::Update(float deltaTime, Grid &grid, Spire& spire, RoundManage
      * 2. end() => Returns an iterator pointing to the last element of the vector,
      */
 
-    auto it = enemies.begin();
-
-    while (it != enemies.end())
     {
-        /* Enemy* enemy = *it:
-         * *it : Dereference the iterator to get the Enemy pointer,
-         * enemy : Assign the pointer to the enemy variable,
-         */
-        Enemy* enemy = *it;
-        enemy->Update(deltaTime, grid, spire);
+        PROFILE_ENEMY("Update All Enemies");
+        auto it = enemies.begin();
 
-        if (enemy->IsDead())
+        while (it != enemies.end())
         {
-            delete enemy;
-            it = enemies.erase(it);
-        }
-        else
-        {
-            ++it;
+            /* Enemy* enemy = *it:
+             * *it : Dereference the iterator to get the Enemy pointer,
+             * enemy : Assign the pointer to the enemy variable,
+             */
+            Enemy* enemy = *it;
+            enemy->Update(deltaTime, grid, spire);
+
+            if (enemy->IsDead())
+            {
+                delete enemy;
+                it = enemies.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
     }
 }
 
 void EnemySpawner::SpawnEnemies(Grid &grid)
 {
+    PROFILE_ENEMY("CreateEnemy");
+
     auto* enemy = new Enemy(spawnPoint.x, spawnPoint.y);
 
     if (hasTarget && pathFinder != nullptr)
     {
         // Calculate path
-        std::vector<PathNode> path = CalculatePath(spawnPoint.x, spawnPoint.y);
+        std::vector<PathNode> path;
+        {
+            PROFILE_PATHFIND("CalculatePath");
+            path = CalculatePath(spawnPoint.x, spawnPoint.y);
+        }
 
         if (!path.empty())
         {
@@ -166,9 +179,10 @@ std::vector<PathNode> EnemySpawner::CalculatePath(int startX, int startY) const
     return {}; // List initialization, returns empty node!
 }
 
-/* TODO (BUG): Adding lerping made enemies lerp their first move. ( making them slower )*/
 void EnemySpawner::CalculatePaths()
 {
+    PROFILE_PATHFIND("RecalculateAllPaths");
+
     if (!hasTarget || pathFinder == nullptr)
     {
         return;
@@ -181,7 +195,11 @@ void EnemySpawner::CalculatePaths()
             int currentX = enemy->GetGridX();
             int currentY = enemy->GetGridY();
 
-            std::vector<PathNode> path = CalculatePath(currentX, currentY);
+            std::vector<PathNode> path;
+            {
+                PROFILE_PATHFIND("SinglePath");
+                path = CalculatePath(currentX, currentY);
+            }
 
             if (!path.empty())
             {
@@ -208,6 +226,8 @@ bool EnemySpawner::HasTarget() const
 
 void EnemySpawner::DrawEnemies() const
 {
+    PROFILE_ENEMY("Draw All Enemies");
+
     for (const Enemy* enemy : enemies)
     {
         enemy->Draw();
