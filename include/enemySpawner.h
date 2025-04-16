@@ -27,6 +27,8 @@ private:
     static constexpr float SPAWN_POINT_Y { 3 };
 
     Texture2D texture { 0 };
+    Texture2D enemyTexture { 0 };
+
     int gridX { 0 };
     int gridY { 0 };
 

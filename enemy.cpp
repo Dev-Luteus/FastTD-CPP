@@ -4,32 +4,12 @@
 #include "profileScope.h"
 #include "spire.h"
 
-Enemy::Enemy(int startX, int startY)
-    : gridX(startX), gridY(startY), lastGridX(startX), lastGridY(startY), 
+Enemy::Enemy(int startX, int startY, const Texture2D& enemyTexture)
+    : texture(enemyTexture), gridX(startX), gridY(startY), lastGridX(startX), lastGridY(startY),
       targetGridX(startX), targetGridY(startY)
-{
-    LoadTextures();
-}
+{ }
 
-Enemy::~Enemy()
-{
-    if (texture.id != 0)
-    {
-        UnloadTexture(texture);
-    }
-}
-
-void Enemy::LoadTextures()
-{
-    texture = LoadTexture("../resources/enemies/skeleton_walk1.png");
-
-    if (texture.id == 0)
-    {
-        throw std::runtime_error("Failed to load enemy texture");
-    }
-
-    SetTextureFilter(texture, TEXTURE_FILTER_POINT);
-}
+Enemy::~Enemy() = default;
 
 void Enemy::Update(float deltaTime, Grid &grid, Spire& spire)
 {

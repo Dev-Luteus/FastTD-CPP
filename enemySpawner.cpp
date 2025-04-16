@@ -5,7 +5,7 @@
 #include "roundManager.h"
 
 EnemySpawner::EnemySpawner()
-    : texture{0}, gridX{0}, gridY{0}, spawnTimer{0.0f},
+    : texture{0}, enemyTexture{0}, gridX{0}, gridY{0}, spawnTimer{0.0f},
       pathFinder{nullptr}, targetX{0}, targetY{0}, hasTarget{false}
 {
     spawnPoint.x = 0;
@@ -17,6 +17,11 @@ EnemySpawner::~EnemySpawner()
     if (texture.id != 0)
     {
         UnloadTexture(texture);
+    }
+
+    if (enemyTexture.id != 0)
+    {
+        UnloadTexture(enemyTexture);
     }
 
     delete pathFinder;
@@ -31,6 +36,7 @@ EnemySpawner::~EnemySpawner()
 
 void EnemySpawner::LoadTextures()
 {
+    // Spawner
     texture = LoadTexture("../resources/enemy_spawner/enemy_spawner.png");
 
     if (texture.id == 0)
@@ -39,6 +45,16 @@ void EnemySpawner::LoadTextures()
     }
 
     SetTextureFilter(texture, TEXTURE_FILTER_POINT);
+
+    // Enemies
+    enemyTexture = LoadTexture("../resources/enemies/skeleton_walk1.png");
+
+    if (enemyTexture.id == 0)
+    {
+        throw std::runtime_error("Failed to load enemy texture");
+    }
+
+    SetTextureFilter(enemyTexture, TEXTURE_FILTER_POINT);
 }
 
 void EnemySpawner::PlaceSpawner(Grid& grid)
@@ -146,7 +162,7 @@ void EnemySpawner::SpawnEnemies(Grid &grid)
 {
     PROFILE_ENEMY("CreateEnemy");
 
-    auto* enemy = new Enemy(spawnPoint.x, spawnPoint.y);
+    auto* enemy = new Enemy(spawnPoint.x, spawnPoint.y, enemyTexture);
 
     if (hasTarget && pathFinder != nullptr)
     {

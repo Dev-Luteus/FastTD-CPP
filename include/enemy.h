@@ -30,10 +30,9 @@ private:
     bool isDead { false };
 
 public:
-    Enemy(int startX, int startY);
+    Enemy(int startX, int startY, const Texture2D& texture); // texture reference
     ~Enemy();
 
-    void LoadTextures();
     void Update(float deltaTime, Grid& grid, Spire& spire);
     void Draw() const;
     void Attack(Spire& spire);
