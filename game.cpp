@@ -19,6 +19,7 @@ void Game::Initialize()
 
     grid.LoadTextures();
     grid.GenerateGrid();
+    grid.InitializeBackground();
 
     spire.LoadTextures();
     spire.PlaceInCenter(grid);

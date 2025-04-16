@@ -28,6 +28,8 @@ void Wall::LoadTextures()
     {
         throw std::runtime_error("Failed to load wall texture");
     }
+
+    SetTextureFilter(texture, TEXTURE_FILTER_POINT);
 }
 
 /* I decided to Store our wall positions, and then draw them in Game!
@@ -49,6 +51,7 @@ bool Wall::PlaceWall(Grid& grid, Player& player, RoundManager& roundManager, int
 
     Cell& cell = grid.ModifyCell(gridX, gridY);
     cell.valueId = WALL_VALUE_ID;
+    grid.UpdateBackgroundCell(gridX, gridY); // updating visuals
     wallPositions.push_back({ gridX, gridY });
 
     return true;

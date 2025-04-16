@@ -7,28 +7,34 @@
 
 class Grid
 {
-private:
     static constexpr int MAX_GRID_TEXTURES { 11 };
     static constexpr int GRID_WIDTH { 41 };
     static constexpr int GRID_HEIGHT { 41 };
     static constexpr int VISIBLE_GRID_WIDTH { 25 };
     static constexpr int VISIBLE_GRID_HEIGHT { 17 };
 
+    RenderTexture2D backgroundTexture { };
+    bool backgroundInitialized = false;
+
     void CheckBounds(int x, int y) const;
     void DrawCell(int id, int x, int y) const;
+    void DrawCellToTexture(int id, int x, int y) const;
 
 public:
-
     // Grid width containing Cell rows by height
-    std::array<std::array<Cell, GRID_HEIGHT>, GRID_WIDTH> cells;
-    std::array<Texture2D, MAX_GRID_TEXTURES> textures;
+    std::array<std::array<Cell, GRID_HEIGHT>, GRID_WIDTH> cells { };
+    std::array<Texture2D, MAX_GRID_TEXTURES> textures { };
 
-    Grid() = default;
+    Grid() : backgroundTexture{}, backgroundInitialized(false), cells{}, textures{} { }
     ~Grid(); // A de-constructor to unload our textures ^^!
 
     void LoadTextures();
     void GenerateGrid();
+    void InitializeBackground();
     void DrawGrid() const;
+
+    // function to update the now pre-rendered background
+    void UpdateBackgroundCell(int x, int y);
 
     [[nodiscard]] Cell& ModifyCell(int x, int y);
     [[nodiscard]] const Cell& GetCell(int x, int y) const;

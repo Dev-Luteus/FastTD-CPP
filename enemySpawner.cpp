@@ -37,6 +37,8 @@ void EnemySpawner::LoadTextures()
     {
         throw std::runtime_error("Failed to load enemy spawner texture");
     }
+
+    SetTextureFilter(texture, TEXTURE_FILTER_POINT);
 }
 
 void EnemySpawner::PlaceSpawner(Grid& grid)

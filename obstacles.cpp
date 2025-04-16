@@ -20,6 +20,7 @@ void Obstacles::LoadTextures()
     {
         std::string fileName = "../resources/obstacles/o" + std::to_string(i+1) + ".png";
         obstacleTextures[i] = LoadTexture(fileName.c_str());
+        SetTextureFilter(obstacleTextures[i], TEXTURE_FILTER_POINT);
     }
 }
 
@@ -180,8 +181,6 @@ void Obstacles::DrawObstacles() const
         float screenY = obstacle.y * Cell::CELL_SIZE;
 
         Vector2 position = { screenX, screenY };
-
-        SetTextureFilter(obstacleTextures[obstacle.textureId], TEXTURE_FILTER_POINT);
         DrawTextureEx(obstacleTextures[obstacle.textureId], position, 0, 2.0f, WHITE);
     }
 }
